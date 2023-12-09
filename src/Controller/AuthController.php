@@ -21,7 +21,6 @@ class AuthController
                 $db = DatabaseConnector::getDatabaseConnection();
                 $userRepository = new UserRepository($db);
                 $userRepository->insertUser($user);
-                $db = null;
                 header('Location: sign-in.php');
             } else {
                 $isFailedRegistration = true;
@@ -37,7 +36,6 @@ class AuthController
         $db = DatabaseConnector::getDatabaseConnection();
         $userRepository = new UserRepository($db);
         $data = $userRepository->getUser($login);
-        $db = null;
         return password_verify($password, $data['password']);
     }
 

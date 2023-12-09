@@ -22,7 +22,6 @@ class UserRepository
             "INSERT INTO users (login, password)
             VALUES ('{$user->getLogin()}', '{$user->getPassword()}');"
         );
-        $this->db = null;
     }
 
     public function getUser(string $login): array|bool
@@ -30,7 +29,6 @@ class UserRepository
         $pdoStatement = $this->db->query(
             "SELECT * FROM users WHERE login = '$login';"
         );
-        $this->db = null;
         return $pdoStatement->fetch(PDO::FETCH_ASSOC);
     }
 }
