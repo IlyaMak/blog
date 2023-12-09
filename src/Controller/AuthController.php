@@ -36,7 +36,7 @@ class AuthController
         $db = DatabaseConnector::getDatabaseConnection();
         $userRepository = new UserRepository($db);
         $data = $userRepository->getUser($login);
-        return password_verify($password, $data['password']);
+        return password_verify($password, $data['password'] ?? '');
     }
 
     private static function validateSignUpFields(
