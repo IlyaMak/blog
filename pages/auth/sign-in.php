@@ -4,7 +4,10 @@ include '../../src/index.php';
 
 use Controller\AuthController;
 
-$isFailedRegistration = AuthController::signUp();
+$isSuccessAuthentication = AuthController::signIn();
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isSuccessAuthentication) {
+	header('Location: ../post/posts-list.php');
+};
 ?>
 
 <!DOCTYPE html>
@@ -13,19 +16,18 @@ $isFailedRegistration = AuthController::signUp();
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Sign Up</title>
+	<title>Sign In</title>
 </head>
 
 <body>
-	<h1>Sign Up</h1>
-	<form action="./sign-up.php" method="post">
+	<h1>Sign In</h1>
+	<form action="./sign-in.php" method="post">
 		<input type="text" name="login" placeholder="Login">
 		<input type="password" name="password" placeholder="Password">
-		<input type="password" name="repeatPassword" placeholder="Repeat Password">
 		<button type="submit">Save</button>
 	</form>
-	<?php if ($isFailedRegistration) { ?>
-		<span>Please, correct fields</span>
+	<?php if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$isSuccessAuthentication) { ?>
+		<span>No user found</span>
 	<?php } ?>
 </body>
 
