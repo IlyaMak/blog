@@ -24,4 +24,13 @@ class UserRepository
         );
         $this->db = null;
     }
+
+    public function getUser(string $login): array|bool
+    {
+        $pdoStatement = $this->db->query(
+            "SELECT * FROM users WHERE login = '$login';"
+        );
+        $this->db = null;
+        return $pdoStatement->fetch(PDO::FETCH_ASSOC);
+    }
 }
