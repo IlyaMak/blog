@@ -18,10 +18,23 @@ class UserRepository
 
     public function insertUser(User $user)
     {
-        $this->db->query(
-            "INSERT INTO users (login, password)
-            VALUES ('{$user->getLogin()}', '{$user->getPassword()}');"
+        $login = $user->getLogin();
+        $password = $user->getPassword();
+        $pdoStatement = $this->db->prepare(
+            "INSERT INTO users (login, password) VALUES (:login, :password);"
         );
-        $this->db = null;
+        $pdoStatement->bindParam('login', $login);
+        $pdoStatement->bindParam('password', $password);
+        $pdoStatement->execute();
+    }
+
+    public function getUser(string $login): array|bool
+    {
+        $pdoStatement = $this->db->prepare(
+            "SELECT * FROM users WHERE login = :login;"
+        );
+        $pdoStatement->bindParam('login', $login);
+        $pdoStatement->execute();
+        return $pdoStatement->fetch(PDO::FETCH_ASSOC);
     }
 }
