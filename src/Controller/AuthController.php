@@ -16,10 +16,9 @@ class AuthController
         $isFailedRegistration = false;
 
         if (
-            $_SERVER['REQUEST_METHOD'] == 'POST'
-            && (isset($login) && strlen($login > 2))
-            && (isset($password) && strlen($password) > 5)
-            && isset($repeatPassword)
+            $_SERVER['REQUEST_METHOD'] === 'POST'
+            && strlen($login) > 2
+            && strlen($password) > 5
             && $password === $repeatPassword
         ) {
             $user = new User($login, password_hash($password, PASSWORD_DEFAULT));
@@ -27,15 +26,26 @@ class AuthController
             $userRepository = new UserRepository($db);
             $userRepository->insertUser($user);
             $db = null;
+            header('Location: sign-in.php');
         } elseif (
-            $_SERVER['REQUEST_METHOD'] == 'POST'
-            && (!(isset($login) && strlen($login > 2))
-                || !(isset($password) && strlen($password) > 5)
-                || !isset($repeatPassword)
-                || !($password === $repeatPassword))
+            $_SERVER['REQUEST_METHOD'] === 'POST'
+            && (strlen($login) < 3
+                || strlen($password) < 6
+                || $password !== $repeatPassword)
         ) {
             $isFailedRegistration = true;
         }
         return $isFailedRegistration;
+    }
+
+    public static function signIn(): bool
+    {
+        $login = $_POST['login'] ?? '';
+        $password = $_POST['password'] ?? '';
+        $db = DatabaseConnector::getDatabaseConnection();
+        $userRepository = new UserRepository($db);
+        $data = $userRepository->getUser($login);
+        $db = null;
+        return password_verify($password, $data['password']);
     }
 }
