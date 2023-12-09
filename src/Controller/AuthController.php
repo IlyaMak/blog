@@ -15,27 +15,37 @@ class AuthController
         $repeatPassword = $_POST['repeatPassword'] ?? '';
         $isFailedRegistration = false;
 
-        if (
-            $_SERVER['REQUEST_METHOD'] == 'POST'
-            && (isset($login) && strlen($login > 2))
-            && (isset($password) && strlen($password) > 5)
-            && isset($repeatPassword)
-            && $password === $repeatPassword
-        ) {
-            $user = new User($login, password_hash($password, PASSWORD_DEFAULT));
-            $db = DatabaseConnector::getDatabaseConnection();
-            $userRepository = new UserRepository($db);
-            $userRepository->insertUser($user);
-            $db = null;
-        } elseif (
-            $_SERVER['REQUEST_METHOD'] == 'POST'
-            && (!(isset($login) && strlen($login > 2))
-                || !(isset($password) && strlen($password) > 5)
-                || !isset($repeatPassword)
-                || !($password === $repeatPassword))
-        ) {
-            $isFailedRegistration = true;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (self::validateSignUpFields($login, $password, $repeatPassword)) {
+                $user = new User($login, password_hash($password, PASSWORD_DEFAULT));
+                $db = DatabaseConnector::getDatabaseConnection();
+                $userRepository = new UserRepository($db);
+                $userRepository->insertUser($user);
+                header('Location: sign-in.php');
+            } else {
+                $isFailedRegistration = true;
+            }
         }
         return $isFailedRegistration;
+    }
+
+    public static function signIn(): bool
+    {
+        $login = $_POST['login'] ?? '';
+        $password = $_POST['password'] ?? '';
+        $db = DatabaseConnector::getDatabaseConnection();
+        $userRepository = new UserRepository($db);
+        $data = $userRepository->getUser($login);
+        return password_verify($password, $data['password'] ?? '');
+    }
+
+    private static function validateSignUpFields(
+        string $login,
+        string $password,
+        string $repeatPassword
+    ): bool {
+        return (strlen($login) > 2
+            && strlen($password) > 5
+            && $password === $repeatPassword);
     }
 }

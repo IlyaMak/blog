@@ -13,7 +13,6 @@ function createUsersTable()
             PRIMARY KEY (id)
         );'
     );
-    $db = null;
 }
 
 createUsersTable();
