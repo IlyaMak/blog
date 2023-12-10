@@ -13,13 +13,13 @@ class TagController
     {
         $name = $_POST['name'] ?? '';
         $isVisible = $_POST['isVisible'] ?? null;
-        $parentTag = isset($_POST['parentTag']) ?
-            ($_POST['parentTag'] === '' ? null : $_POST['parentTag']) : null;
+        $parentTagId = empty($_POST['parentTagId']) ? null : $_POST['parentTagId'];
+
         $isFailed = false;
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (self::validateCreateTagFields($name, $isVisible)) {
-                $tag = new Tag($name, $isVisible, $parentTag);
+                $tag = new Tag($name, $isVisible, $parentTagId);
                 $db = DatabaseConnector::getDatabaseConnection();
                 $tagRepository = new TagRepository($db);
                 try {

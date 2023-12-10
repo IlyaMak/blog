@@ -28,7 +28,7 @@ $tags = $tagRepository->getTags();
         Is Visible?
         <label><input type="radio" name="isVisible" value="1">Yes</label>
         <label><input type="radio" name="isVisible" value="0">No</label>
-        <select name="parentTag">
+        <select name="parentTagId">
             <option value="">Select a parent tag (optional)</option>
             <?php if (is_array($tags)) { ?>
                 <?php for ($i = 0; $i <= count($tags) - 1; $i++) { ?>
