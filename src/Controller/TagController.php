@@ -5,6 +5,7 @@ namespace Controller;
 use Entity\Tag;
 use PDOException;
 use Repository\TagRepository;
+use Service\DatabaseConnector;
 
 class TagController
 {
@@ -19,7 +20,8 @@ class TagController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (self::validateCreateTagFields($name, $isVisible)) {
                 $tag = new Tag($name, $isVisible, $parentTag);
-                $tagRepository = new TagRepository();
+                $db = DatabaseConnector::getDatabaseConnection();
+                $tagRepository = new TagRepository($db);
                 try {
                     $tagRepository->insertTag($tag);
                 } catch (PDOException $e) {

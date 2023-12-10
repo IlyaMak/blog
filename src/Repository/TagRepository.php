@@ -3,16 +3,15 @@
 namespace Repository;
 
 use Entity\Tag;
-use Service\DatabaseConnector;
 use PDO;
 
 class TagRepository
 {
     private ?PDO $db;
 
-    public function __construct()
+    public function __construct(PDO $db)
     {
-        $this->db = DatabaseConnector::getDatabaseConnection();
+        $this->db = $db;
     }
 
     public function insertTag(Tag $tag): void
