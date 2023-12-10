@@ -11,13 +11,13 @@ class TagController
     public static function createTag(): bool
     {
         $name = $_POST['name'] ?? '';
-        $isVisible = $_POST['isVisible'] ?? false;
+        $isVisible = $_POST['isVisible'] ?? null;
         $parentTag = isset($_POST['parentTag']) ?
             ($_POST['parentTag'] === '' ? null : $_POST['parentTag']) : null;
         $isFailed = false;
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (self::validateCreateTagFields($name)) {
+            if (self::validateCreateTagFields($name, $isVisible)) {
                 $tag = new Tag($name, $isVisible, $parentTag);
                 $tagRepository = new TagRepository();
                 try {
@@ -35,8 +35,9 @@ class TagController
     }
 
     private static function validateCreateTagFields(
-        string $name
+        string $name,
+        ?bool $isVisible
     ): bool {
-        return strlen($name) > 1;
+        return strlen($name) > 1 && isset($isVisible);
     }
 }
