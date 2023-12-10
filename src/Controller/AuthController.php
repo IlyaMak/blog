@@ -3,6 +3,7 @@
 namespace Controller;
 
 use Entity\User;
+use PDOException;
 use Repository\UserRepository;
 use Service\DatabaseConnector;
 
@@ -20,7 +21,12 @@ class AuthController
                 $user = new User($login, password_hash($password, PASSWORD_DEFAULT));
                 $db = DatabaseConnector::getDatabaseConnection();
                 $userRepository = new UserRepository($db);
-                $userRepository->insertUser($user);
+                try {
+                    $userRepository->insertUser($user);
+                } catch (PDOException $e) {
+                    $isFailedRegistration = true;
+                    return $isFailedRegistration;
+                }
                 header('Location: sign-in.php');
             } else {
                 $isFailedRegistration = true;
