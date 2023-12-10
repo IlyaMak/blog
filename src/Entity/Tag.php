@@ -4,19 +4,16 @@ namespace Entity;
 
 class Tag
 {
-    private string $id;
-    private string $name;
-    private bool $isVisible;
-    private ?int $parentTag;
+    private int $id;
 
     public function __construct(
-        string $name,
-        string $isVisible,
-        ?int $parentTag
+        private string $name,
+        private bool $isVisible,
+        private ?int $parentTagId
     ) {
         $this->name = $name;
         $this->isVisible = $isVisible;
-        $this->parentTag = $parentTag;
+        $this->parentTagId = $parentTagId;
     }
 
     public function getId(): string
@@ -24,24 +21,14 @@ class Tag
         return $this->id;
     }
 
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
     public function getName(): string
     {
         return $this->name;
-    }
-
-    public function getIsVisible(): bool
-    {
-        return $this->isVisible;
-    }
-
-    public function getParentTag(): ?int
-    {
-        return $this->parentTag;
-    }
-
-    public function setId(string $id): void
-    {
-        $this->id = $id;
     }
 
     public function setName(string $name): void
@@ -49,13 +36,23 @@ class Tag
         $this->name = $name;
     }
 
-    public function setIsVisible(string $isVisible): void
+    public function getIsVisible(): bool
+    {
+        return $this->isVisible;
+    }
+
+    public function setIsVisible(bool $isVisible): void
     {
         $this->isVisible = $isVisible;
     }
 
-    public function setPaarentTag(string $parentTag): void
+    public function getParentTagId(): ?int
     {
-        $this->parentTag = $parentTag;
+        return $this->parentTagId;
+    }
+
+    public function setParentTagId(int $parentTagId): void
+    {
+        $this->parentTagId = $parentTagId;
     }
 }

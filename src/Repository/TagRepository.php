@@ -20,14 +20,14 @@ class TagRepository
     {
         $name = $tag->getName();
         $isVisible = $tag->getIsVisible();
-        $parentTag = $tag->getParentTag();
+        $parentTagId = $tag->getParentTagId();
         $pdoStatement = $this->db->prepare(
-            "INSERT INTO tags (name, is_visible, parent_tag) 
-            VALUES (:name, :isVisible, :parentTag);"
+            "INSERT INTO tags (name, is_visible, parent_tag_id) 
+            VALUES (:name, :isVisible, :parentTagId);"
         );
         $pdoStatement->bindParam('name', $name);
         $pdoStatement->bindParam('isVisible', $isVisible, PDO::PARAM_BOOL);
-        $pdoStatement->bindParam('parentTag', $parentTag, PDO::PARAM_INT);
+        $pdoStatement->bindParam('parentTagId', $parentTagId, PDO::PARAM_INT);
         $pdoStatement->execute();
     }
 

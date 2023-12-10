@@ -12,8 +12,9 @@ function createTagsTable()
             id int NOT NULL AUTO_INCREMENT,
             name varchar(255) NOT NULL UNIQUE,
             is_visible boolean NOT NULL,
-            parent_tag int NULL DEFAULT NULL,
-            PRIMARY KEY (id)
+            parent_tag_id int NULL DEFAULT NULL,
+            PRIMARY KEY (id),
+            FOREIGN KEY (parent_tag_id) REFERENCES tags(id)
         );'
     );
 }
