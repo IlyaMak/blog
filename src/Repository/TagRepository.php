@@ -10,10 +10,9 @@ class TagRepository
 {
     private ?PDO $db;
 
-    public function __construct($db)
+    public function __construct()
     {
-        $db = DatabaseConnector::getDatabaseConnection();
-        $this->db = $db;
+        $this->db = DatabaseConnector::getDatabaseConnection();
     }
 
     public function insertTag(Tag $tag): void
