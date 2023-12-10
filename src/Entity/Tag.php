@@ -11,9 +11,6 @@ class Tag
         private bool $isVisible,
         private ?int $parentTagId
     ) {
-        $this->name = $name;
-        $this->isVisible = $isVisible;
-        $this->parentTagId = $parentTagId;
     }
 
     public function getId(): string
