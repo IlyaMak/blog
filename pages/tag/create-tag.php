@@ -26,7 +26,7 @@ $tags = $tagRepository->getTags();
     <form action="./create-tag.php" method="post">
         <input type="text" name="name" placeholder="Name">
         Is Visible?
-        <label><input type="radio" name="isVisible" value="1">Yes</label>
+        <label><input type="radio" name="isVisible" value="1" checked>Yes</label>
         <label><input type="radio" name="isVisible" value="0">No</label>
         <select name="parentTagId">
             <option value="">Select a parent tag (optional)</option>
