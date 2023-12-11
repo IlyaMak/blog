@@ -35,4 +35,12 @@ class TagRepository
         $pdoStatement->execute();
         return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getTag(int $id): array|bool
+    {
+        $pdoStatement = $this->db->prepare("SELECT * FROM tags WHERE id = :id");
+        $pdoStatement->bindParam('id', $id);
+        $pdoStatement->execute();
+        return $pdoStatement->fetch(PDO::FETCH_ASSOC);
+    }
 }
