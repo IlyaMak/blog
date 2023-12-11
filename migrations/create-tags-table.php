@@ -1,6 +1,6 @@
 <?php
 
-include_once(getcwd() . '/src/index.php');
+include_once(getcwd() . '/src/autoload.php');
 
 use Service\DatabaseConnector;
 

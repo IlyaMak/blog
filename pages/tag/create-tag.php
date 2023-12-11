@@ -1,6 +1,6 @@
 <?php
 
-include '../../src/index.php';
+include '../../src/autoload.php';
 
 use Controller\TagController;
 use Repository\TagRepository;
