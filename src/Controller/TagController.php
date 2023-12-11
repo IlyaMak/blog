@@ -12,7 +12,7 @@ class TagController
     public static function createTag(): bool
     {
         $name = $_POST['name'] ?? '';
-        $isVisible = $_POST['isVisible'] ?? null;
+        $isVisible = $_POST['isVisible'] ?? false;
         $parentTagId = empty($_POST['parentTagId']) ? null : $_POST['parentTagId'];
 
         $isFailed = false;
