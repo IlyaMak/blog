@@ -2,9 +2,9 @@
 
 include '../../src/autoload.php';
 
-use Controller\TagController;
-use Repository\TagRepository;
-use Service\DatabaseConnector;
+use App\Controller\TagController;
+use App\Repository\TagRepository;
+use App\Service\DatabaseConnector;
 
 $isFailed = TagController::createTag();
 $db = DatabaseConnector::getDatabaseConnection();

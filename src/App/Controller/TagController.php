@@ -1,11 +1,11 @@
 <?php
 
-namespace Controller;
+namespace App\Controller;
 
-use Entity\Tag;
+use App\Entity\Tag;
 use PDOException;
-use Repository\TagRepository;
-use Service\DatabaseConnector;
+use App\Repository\TagRepository;
+use App\Service\DatabaseConnector;
 
 class TagController
 {

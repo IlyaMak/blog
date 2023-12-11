@@ -1,8 +1,8 @@
 <?php
 
-namespace Repository;
+namespace App\Repository;
 
-use Entity\Tag;
+use App\Entity\Tag;
 use PDO;
 
 class TagRepository

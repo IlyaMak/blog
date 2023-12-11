@@ -2,7 +2,7 @@
 
 include '../../src/autoload.php';
 
-use Controller\AuthController;
+use App\Controller\AuthController;
 
 $isSuccessAuthentication = AuthController::signIn();
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isSuccessAuthentication) {

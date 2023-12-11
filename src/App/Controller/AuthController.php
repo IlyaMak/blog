@@ -1,11 +1,11 @@
 <?php
 
-namespace Controller;
+namespace App\Controller;
 
-use Entity\User;
+use App\Entity\User;
 use PDOException;
-use Repository\UserRepository;
-use Service\DatabaseConnector;
+use App\Repository\UserRepository;
+use App\Service\DatabaseConnector;
 
 class AuthController
 {

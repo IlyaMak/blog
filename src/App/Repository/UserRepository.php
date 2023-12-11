@@ -1,9 +1,9 @@
 <?php
 
-namespace Repository;
+namespace App\Repository;
 
-use Service\DatabaseConnector;
-use Entity\User;
+use App\Service\DatabaseConnector;
+use App\Entity\User;
 use PDO;
 
 class UserRepository

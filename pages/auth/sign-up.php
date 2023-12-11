@@ -2,7 +2,7 @@
 
 include '../../src/autoload.php';
 
-use Controller\AuthController;
+use App\Controller\AuthController;
 
 $isFailedRegistration = AuthController::signUp();
 ?>

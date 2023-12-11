@@ -2,7 +2,7 @@
 
 include_once(getcwd() . '/src/autoload.php');
 
-use Service\DatabaseConnector;
+use App\Service\DatabaseConnector;
 
 function createUsersTable()
 {
