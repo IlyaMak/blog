@@ -1,3 +1,15 @@
+<?php
+
+include '../../src/autoload.php';
+
+use App\Repository\TagRepository;
+use App\Service\DatabaseConnector;
+
+$db = DatabaseConnector::getDatabaseConnection();
+$tagRepository = new TagRepository($db);
+$tags = $tagRepository->getVisibleTagsWithParentTagName();
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -10,6 +22,20 @@
 <body>
 	<h1>Tags List</h1>
 	<a href="../tag/create-tag.php">Create tag</a>
+	<table>
+		<tr>
+			<th>Name</th>
+			<th>Parent tag</th>
+		</tr>
+		<?php for ($i = 0; $i <= count($tags) - 1; $i++) { ?>
+			<tr>
+				<td><?php echo $tags[$i]['name'] ?></td>
+				<td>
+					<?php echo $tags[$i]['parent_tag_name'] ?>
+				</td>
+			</tr>
+		<?php } ?>
+	</table>
 </body>
 
 </html>

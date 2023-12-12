@@ -35,4 +35,15 @@ class TagRepository
         $pdoStatement->execute();
         return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getVisibleTagsWithParentTagName(): array|bool
+    {
+        $pdoStatement = $this->db->prepare(
+            "SELECT t1.name, COALESCE(t2.name, '-') as parent_tag_name FROM tags t1
+            LEFT JOIN tags t2 on t1.parent_tag_id = t2.id
+            WHERE t1.is_visible = 1"
+        );
+        $pdoStatement->execute();
+        return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
