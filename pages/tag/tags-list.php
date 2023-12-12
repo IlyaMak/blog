@@ -7,18 +7,7 @@ use App\Service\DatabaseConnector;
 
 $db = DatabaseConnector::getDatabaseConnection();
 $tagRepository = new TagRepository($db);
-$tags = $tagRepository->getTags();
-
-$getParentTagName = function (int $tagId) use ($tags, $tagRepository) {
-	try {
-		echo $tagRepository->getTag(
-			$tags[$tagId]['parent_tag_id']
-		)['name'];
-	} catch (TypeError $e) {
-		echo '-';
-	}
-};
-
+$tags = $tagRepository->getVisibleTagsWithParentTagName();
 ?>
 
 <!DOCTYPE html>
@@ -38,16 +27,14 @@ $getParentTagName = function (int $tagId) use ($tags, $tagRepository) {
 			<th>Name</th>
 			<th>Parent tag</th>
 		</tr>
-		<?php for ($i = 0; $i <= count($tags) - 1; $i++) {
-			if ($tags[$i]['is_visible']) { ?>
-				<tr>
-					<td><?php echo $tags[$i]['name'] ?></td>
-					<td>
-						<?php $getParentTagName($i) ?>
-					</td>
-				</tr>
-		<?php }
-		} ?>
+		<?php for ($i = 0; $i <= count($tags) - 1; $i++) { ?>
+			<tr>
+				<td><?php echo $tags[$i]['name'] ?></td>
+				<td>
+					<?php echo $tags[$i]['parent_tag_name'] ?>
+				</td>
+			</tr>
+		<?php } ?>
 	</table>
 </body>
 
