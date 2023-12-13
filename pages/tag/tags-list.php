@@ -14,34 +14,34 @@ $tags = $tagRepository->getVisibleTagsWithParentTagName();
 <html>
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Tags List</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tags List</title>
 </head>
 
 <body>
-	<h1>Tags List</h1>
-	<a href="../tag/create-tag.php">Create tag</a>
-	<table>
-		<tr>
-			<th>Name</th>
-			<th>Parent tag</th>
-		</tr>
-		<?php for ($i = 0; $i <= count($tags) - 1; $i++) { ?>
-			<tr>
-				<td><?php echo $tags[$i]['name'] ?></td>
-				<td>
-					<?php echo $tags[$i]['parent_tag_name'] ?>
-				</td>
-				<td>
-					<form action="./delete-tag.php" method="get">
-						<input type="hidden" name="tagId" value="<?php echo $tags[$i]['id'] ?>">
-						<button type="submit">Delete</button>
-					</form>
-				</td>
-			</tr>
-		<?php } ?>
-	</table>
+    <h1>Tags List</h1>
+    <a href="../tag/create-tag.php">Create tag</a>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Parent tag</th>
+        </tr>
+        <?php for ($i = 0; $i <= count($tags) - 1; $i++) { ?>
+            <tr>
+                <td><?php echo $tags[$i]['name'] ?></td>
+                <td>
+                    <?php echo $tags[$i]['parent_tag_name'] ?>
+                </td>
+                <td>
+                    <form action="./delete-tag.php" method="get">
+                        <input type="hidden" name="tagId" value="<?php echo $tags[$i]['id'] ?>">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        <?php } ?>
+    </table>
 </body>
 
 </html>

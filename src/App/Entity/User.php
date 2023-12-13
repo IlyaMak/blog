@@ -2,7 +2,8 @@
 
 namespace App\Entity;
 
-class User {
+class User
+{
     private string $id;
     private string $login;
     private string $password;
@@ -12,28 +13,34 @@ class User {
         $this->login = $login;
         $this->password = $password;
     }
-    
-    public function getId() {
+
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getLogin() {
+    public function getLogin()
+    {
         return $this->login;
     }
-    
-    public function getPassword() {
+
+    public function getPassword()
+    {
         return $this->password;
     }
-    
-    public function setId(string $id) {
+
+    public function setId(string $id)
+    {
         $this->id = $id;
     }
-    
-    public function setLogin(string $login) {
+
+    public function setLogin(string $login)
+    {
         $this->login = $login;
     }
 
-    public function setPassword(string $password) {
+    public function setPassword(string $password)
+    {
         $this->password = $password;
     }
 }
