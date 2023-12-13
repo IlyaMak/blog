@@ -33,6 +33,12 @@ $tags = $tagRepository->getVisibleTagsWithParentTagName();
 				<td>
 					<?php echo $tags[$i]['parent_tag_name'] ?>
 				</td>
+				<td>
+					<form action="./delete-tag.php" method="get">
+						<input type="hidden" name="tagId" value="<?php echo $tags[$i]['id'] ?>">
+						<button type="submit">Delete</button>
+					</form>
+				</td>
 			</tr>
 		<?php } ?>
 	</table>

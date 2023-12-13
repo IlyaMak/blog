@@ -36,6 +36,25 @@ class TagController
         return $isFailed;
     }
 
+    public static function deleteTag(): bool
+    {
+        $isExceptionThrown = false;
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $db = DatabaseConnector::getDatabaseConnection();
+            $tagRepository = new TagRepository($db);
+            try {
+                $tagRepository->deleteTag($_POST['tagId']);
+            } catch (PDOException $e) {
+                $isExceptionThrown = true;
+            }
+            if (!$isExceptionThrown) {
+                header('Location: tags-list.php');
+            }
+        }
+        return $isExceptionThrown;
+    }
+
     private static function validateCreateTagFields(
         string $name,
         ?bool $isVisible
