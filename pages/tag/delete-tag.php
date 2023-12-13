@@ -1,25 +1,10 @@
 <?php
 
-use App\Repository\TagRepository;
-use App\Service\DatabaseConnector;
+use App\Controller\TagController;
 
 include '../../src/autoload.php';
 
-$isCannotDeleteExceptionTrow = false;
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $db = DatabaseConnector::getDatabaseConnection();
-    $tagRepository = new TagRepository($db);
-    try {
-        $tagRepository->deleteTag($_POST['tagId']);
-    } catch (PDOException $e) {
-        $isCannotDeleteExceptionTrow = true;
-    }
-    if (!$isCannotDeleteExceptionTrow) {
-        header('Location: tags-list.php');
-    }
-}
-
+$isExceptionThrown = TagController::deleteTag();
 ?>
 
 <!DOCTYPE html>
@@ -33,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
     <h1>Delete A Tag</h1>
-    <?php if ($isCannotDeleteExceptionTrow) { ?>
+    <?php if ($isExceptionThrown) { ?>
         <span>Delete all child tags first</span>
     <?php } ?>
     <form action="./delete-tag.php" method="post">
