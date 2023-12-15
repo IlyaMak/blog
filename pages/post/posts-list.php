@@ -9,6 +9,7 @@
 
 <body>
     <h1>Posts List</h1>
+    <a href="./create-post.php">Create A Post</a>
     <a href="../tag/tags-list.php">Tags List</a>
 </body>
 
