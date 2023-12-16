@@ -27,10 +27,10 @@ $isFailed = PostController::createPost($db);
     <h1>Create A Post</h1>
     <form action="./create-post.php" method="post" enctype="multipart/form-data">
         <div>
-            <input type="text" name="headline" placeholder="Headline" />
+            <input type="text" name="headline" placeholder="Headline" required />
         </div>
         <div>
-            <textarea name="body" placeholder="Body"></textarea>
+            <textarea name="body" placeholder="Body" required></textarea>
         </div>
         <div>
             <label for="tags">Select tags</label>
@@ -48,7 +48,7 @@ $isFailed = PostController::createPost($db);
         </div>
         <div>
             <label for="image">Preview image</label>
-            <input type="file" name="image" id="image" accept="image/*" />
+            <input type="file" name="image" id="image" accept="image/*" required />
         </div>
         <div>
             <input type="checkbox" id="isVisible" name="isVisible" value="1" checked />

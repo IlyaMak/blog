@@ -18,7 +18,8 @@ class PostController
         $isFailed = false;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (
-                $_FILES['image']['error'] !== UPLOAD_ERR_OK
+                empty($_FILES['image'])
+                || $_FILES['image']['error'] !== UPLOAD_ERR_OK
                 || $_FILES['image']['size'] >= 2000000
                 || ($_FILES['image']['type'] !== 'image/png' || $_FILES['image']['type'] !== 'image/jpg' || $_FILES['image']['type'] !== 'image/jpeg')
             ) {
@@ -54,7 +55,6 @@ class PostController
         return (
             strlen($post->getHeadline()) > 2
             && strlen($post->getBody()) > 2
-            && !empty($image)
         );
     }
 }
