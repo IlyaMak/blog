@@ -7,9 +7,9 @@ namespace App\Controller;
 use App\Entity\Post;
 use App\Repository\PostRepository;
 use App\Repository\PostsTagsRepository;
-use PDOException;
 use DateTime;
 use PDO;
+use Throwable;
 
 class PostController
 {
@@ -55,8 +55,8 @@ class PostController
                         $postTagsRepository->insertPostTag($postId, $tags);
                     }
                     $db->commit();
-                } catch (PDOException $e) {
-                    $db->rollBack();
+                } catch (Throwable $e) {
+                    var_dump($db->rollBack());
                     $isFailed = true;
                     return $isFailed;
                 }
