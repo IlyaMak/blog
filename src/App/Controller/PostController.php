@@ -17,7 +17,15 @@ class PostController
     {
         $isFailed = false;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $post = PostService::getPostInstance();
+            if (
+                $_FILES['image']['error'] !== UPLOAD_ERR_OK
+                || $_FILES['image']['size'] >= 2000000
+                || ($_FILES['image']['type'] !== 'image/png' || $_FILES['image']['type'] !== 'image/jpg' || $_FILES['image']['type'] !== 'image/jpeg')
+            ) {
+                $isFailed = true;
+                return $isFailed;
+            }
+                $post = PostService::getPostInstance();
             if (self::validateCreatePostFields($post, $_FILES['image'])) {
                 $postRepository = new PostRepository($db);
                 try {
@@ -41,15 +49,12 @@ class PostController
         return $isFailed;
     }
 
-    private static function validateCreatePostFields(
-        Post $post, 
-        array $image
-    ): bool {
+    private static function validateCreatePostFields(Post $post): bool
+    {
         return (
             strlen($post->getHeadline()) > 2
             && strlen($post->getBody()) > 2
             && !empty($image)
-            && $image['error'] === UPLOAD_ERR_OK
         );
     }
 }
