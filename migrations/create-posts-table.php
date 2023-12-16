@@ -14,7 +14,7 @@ function createPostsTable()
             id int NOT NULL AUTO_INCREMENT,
             headline varchar(255) NOT NULL,
             body LONGTEXT NOT NULL,
-            publish_date varchar(255) NOT NULL,
+            publish_date datetime NOT NULL,
             image_path varchar(255) NOT NULL,
             is_visible boolean NOT NULL,
             PRIMARY KEY (id)
