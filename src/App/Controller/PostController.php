@@ -48,7 +48,7 @@ class PostController
         return (
             strlen($post->getHeadline()) > 2
             && strlen($post->getBody()) > 2
-            && isset($image)
+            && !empty($image)
             && $image['error'] === UPLOAD_ERR_OK
         );
     }
