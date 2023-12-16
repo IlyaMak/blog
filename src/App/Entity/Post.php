@@ -11,7 +11,7 @@ class Post
     public function __construct(
         private string $headline,
         private string $body,
-        private ?array $tags,
+        private array $tags,
         private string $publishDate,
         private string $imagePath,
         private bool $isVisible
@@ -48,7 +48,7 @@ class Post
         $this->body = $body;
     }
 
-    public function getTags(): ?array
+    public function getTags(): array
     {
         return $this->tags;
     }
