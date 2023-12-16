@@ -18,7 +18,7 @@ class PostService
         $imagePath = '';
         $imagePath = realpath('../../public') . '/' . $_FILES['image']['name'];
         move_uploaded_file($_FILES['image']['tmp_name'], $imagePath);
-        $isVisible = (bool) isset($_POST['isVisible']) ?? false;
+        $isVisible = !empty($_POST['isVisible']);
         return new Post(
             $headline,
             $body,
