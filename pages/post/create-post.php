@@ -48,7 +48,7 @@ $isFailed = PostController::createPost($db);
         </div>
         <div>
             <label for="image">Preview image</label>
-            <input type="file" name="image" id="image" accept="image/*" required />
+            <input type="file" name="image" id="image" size="2000000" required />
         </div>
         <div>
             <input type="checkbox" id="isVisible" name="isVisible" value="1" checked />

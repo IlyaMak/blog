@@ -18,10 +18,8 @@ class PostController
         $isFailed = false;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (
-                empty($_FILES['image'])
-                || $_FILES['image']['error'] !== UPLOAD_ERR_OK
-                || $_FILES['image']['size'] >= 2000000
-                || ($_FILES['image']['type'] !== 'image/png' || $_FILES['image']['type'] !== 'image/jpg' || $_FILES['image']['type'] !== 'image/jpeg')
+                $_FILES['image']['error'] !== UPLOAD_ERR_OK
+                || !in_array($_FILES['image']['type'], ['image/png', 'image/jpg', 'image/jpeg'])
             ) {
                 $isFailed = true;
                 return $isFailed;
