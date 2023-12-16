@@ -11,7 +11,7 @@ use App\Service\DatabaseConnector;
 $db = DatabaseConnector::getDatabaseConnection();
 $tagRepository = new TagRepository($db);
 $tags = $tagRepository->getTags();
-$isFailed = PostController::createPost();
+$isFailed = PostController::createPost($db);
 ?>
 
 <!DOCTYPE html>

@@ -8,23 +8,24 @@ use App\Entity\Post;
 use App\Repository\PostRepository;
 use App\Repository\PostsTagsRepository;
 use PDOException;
-use App\Service\DatabaseConnector;
 use DateTime;
+use PDO;
 
 class PostController
 {
-    public static function createPost(): bool
+    public static function createPost(PDO $db): bool
     {
         $headline = $_POST['headline'] ?? '';
-        $body = $_POST['body'] ?? '';
+        $body = '';
+        if (isset($_POST['body'])) {
+            $body = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $_POST['body']);
+        }
         $tags = $_POST['tags'] ?? [];
         $currentYear = isset($_POST['publishDate']) ? (int) strtok($_POST['publishDate'], '-') : 0;
         $publishDate = (isset($_POST['publishDate'])
             && ($currentYear === ((int) date('Y'))
                 || $currentYear === ((int) date('Y') + 1)))
-            ? new DateTime(
-                strtok($_POST['publishDate'], 'T') . ' ' . substr($_POST['publishDate'], (int) strpos($_POST['publishDate'], 'T') + 1)
-            )
+            ? DateTime::createFromFormat("Y-m-d\\TH:i", $_POST['publishDate'])
             : new DateTime();
         $imagePath = '';
         if (isset($_FILES['image'])) {
@@ -36,7 +37,7 @@ class PostController
         $isFailed = false;
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (self::validateCreatePostFields($headline, $body)) {
+            if (self::validateCreatePostFields($headline, $body, $_FILES['image'])) {
                 $post = new Post(
                     $headline,
                     $body,
@@ -45,15 +46,17 @@ class PostController
                     $imagePath,
                     $isVisible
                 );
-                $db = DatabaseConnector::getDatabaseConnection();
                 $postRepository = new PostRepository($db);
                 try {
+                    $db->beginTransaction();
                     $postId = $postRepository->insertPost($post);
                     if (isset($_POST['tags'])) {
                         $postTagsRepository = new PostsTagsRepository($db);
                         $postTagsRepository->insertPostTag($postId, $tags);
                     }
+                    $db->commit();
                 } catch (PDOException $e) {
+                    $db->rollBack();
                     $isFailed = true;
                     return $isFailed;
                 }
@@ -67,13 +70,14 @@ class PostController
 
     private static function validateCreatePostFields(
         string $headline,
-        string $body
+        string $body,
+        array $image
     ): bool {
         return (
-            strlen($headline) > 2 
-            && strlen($body) > 2 
-            && isset($_FILES['image'])
-            && $_FILES['image']['error'] === UPLOAD_ERR_OK
+            strlen($headline) > 2
+            && strlen($body) > 2
+            && isset($image)
+            && $image['error'] === UPLOAD_ERR_OK
         );
     }
 }
