@@ -1,8 +1,8 @@
 <?php
-
 declare(strict_types=1);
 
-include '../../src/autoload.php';
+include '../set-project-root.php';
+include PROJECT_ROOT . '/src/bootstrap.php';
 
 use App\Repository\PostRepository;
 use App\Service\DatabaseConnector;
