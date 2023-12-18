@@ -49,9 +49,7 @@ $posts = $postRepository->getVisiblePosts();
                             : $posts[$i]['body'] ?>
                     </td>
                     <td>
-                        <?php echo strlen($posts[$i]['tags']) > 10
-                            ? substr($posts[$i]['tags'], 0, 10) . '...'
-                            : $posts[$i]['tags'] ?>
+                        <?php echo $posts[$i]['tags'] ?>
                     </td>
                 </tr>
         <?php }
