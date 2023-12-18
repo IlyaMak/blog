@@ -32,28 +32,30 @@ $posts = $postRepository->getVisiblePosts();
             <th>Body</th>
             <th>Tags</th>
         </tr>
-        <?php for ($i = 0; $i <= count($posts) - 1; $i++) { ?>
-            <tr>
-                <td>
-                    <img src="<?php echo $posts[$i]['image_path'] ?>" alt="post image" width="100px" />
-                </td>
-                <td>
-                    <?php echo strlen($posts[$i]['headline']) > 50
-                        ? substr($posts[$i]['headline'], 0, 50) . '...'
-                        : $posts[$i]['headline'] ?>
-                </td>
-                <td>
-                    <?php echo strlen($posts[$i]['body']) > 100
-                        ? substr($posts[$i]['body'], 0, 100) . '...'
-                        : $posts[$i]['body'] ?>
-                </td>
-                <td>
-                    <?php echo strlen($posts[$i]['tags']) > 10
-                        ? substr($posts[$i]['tags'], 0, 10) . '...'
-                        : $posts[$i]['tags'] ?>
-                </td>
-            </tr>
-        <?php } ?>
+        <?php if (count($posts) > 0) {
+            for ($i = 0; $i <= count($posts) - 1; $i++) { ?>
+                <tr>
+                    <td>
+                        <img src="<?php echo $posts[$i]['image_path'] ?>" alt="post image" width="100px" />
+                    </td>
+                    <td>
+                        <?php echo strlen($posts[$i]['headline']) > 50
+                            ? substr($posts[$i]['headline'], 0, 50) . '...'
+                            : $posts[$i]['headline'] ?>
+                    </td>
+                    <td>
+                        <?php echo strlen($posts[$i]['body']) > 100
+                            ? substr($posts[$i]['body'], 0, 100) . '...'
+                            : $posts[$i]['body'] ?>
+                    </td>
+                    <td>
+                        <?php echo strlen($posts[$i]['tags']) > 10
+                            ? substr($posts[$i]['tags'], 0, 10) . '...'
+                            : $posts[$i]['tags'] ?>
+                    </td>
+                </tr>
+        <?php }
+        } ?>
     </table>
 </body>
 

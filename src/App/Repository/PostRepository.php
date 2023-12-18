@@ -36,7 +36,7 @@ class PostRepository
         return (int) $this->db->lastInsertId();
     }
 
-    public function getVisiblePosts(): array|bool
+    public function getVisiblePosts(): array
     {
         $visible = true;
         $currentDate = date('Y-m-d H:i:s');
@@ -52,12 +52,14 @@ class PostRepository
         $pdoStatement->execute();
         $records = $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
         $modifiedRecords = [];
-        foreach ($records as $record) {
-            $id = $record['id'];
-            if (!isset($modifiedRecords[$id])) {
-                $modifiedRecords[$id] = $record;
-            } else {
-                $modifiedRecords[$id]['tags'] .= ",{$record['tags']}";
+        if (is_array($records)) {
+            foreach ($records as $record) {
+                $id = $record['id'];
+                if (!isset($modifiedRecords[$id])) {
+                    $modifiedRecords[$id] = $record;
+                } else {
+                    $modifiedRecords[$id]['tags'] .= ",{$record['tags']}";
+                }
             }
         }
         return array_values($modifiedRecords);
