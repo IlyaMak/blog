@@ -1,6 +1,8 @@
 <?php
+declare(strict_types=1);
 
-include_once(getcwd() . '/src/autoload.php');
+include_once('set-project-root.php');
+include_once(PROJECT_ROOT . '/src/bootstrap.php');
 
 use App\Service\DatabaseConnector;
 
