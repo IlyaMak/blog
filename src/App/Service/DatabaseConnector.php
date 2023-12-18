@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Service;
 
@@ -17,11 +18,10 @@ class DatabaseConnector
     {
         if (self::$db == null) {
             try {
-                $env = parse_ini_file('../../.env');
                 self::$db = new PDO(
-                    "mysql:host={$env['DATABASE_SERVER_NAME']};dbname={$env['DATABASE_NAME']}",
-                    $env['DATABASE_USER'],
-                    $env['DATABASE_PASSWORD']
+                    "mysql:host={$_ENV['DATABASE_SERVER_NAME']};dbname={$_ENV['DATABASE_NAME']}",
+                    $_ENV['DATABASE_USER'],
+                    $_ENV['DATABASE_PASSWORD']
                 );
                 self::$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $e) {

@@ -1,8 +1,10 @@
 <?php
+declare(strict_types=1);
+
+include '../set-project-root.php';
+include PROJECT_ROOT . '/src/bootstrap.php';
 
 use App\Controller\TagController;
-
-include '../../src/autoload.php';
 
 $isExceptionThrown = TagController::deleteTag();
 ?>
