@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Service;
 
@@ -16,7 +17,7 @@ class PostService
             ? DateTime::createFromFormat("Y-m-d\\TH:i", $_POST['publishDate'])
             : new DateTime();
         $imagePath = '';
-        $imagePath = realpath('../../public') . '/' . $_FILES['image']['name'];
+        $imagePath = '/public/' . $_FILES['image']['name'];
         move_uploaded_file($_FILES['image']['tmp_name'], $imagePath);
         $isVisible = !empty($_POST['isVisible']);
         return new Post(
