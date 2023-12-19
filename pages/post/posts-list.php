@@ -31,6 +31,7 @@ $posts = $postRepository->getVisiblePosts();
             <th>Headline</th>
             <th>Body</th>
             <th>Tags</th>
+            <th>Actions</th>
         </tr>
         <?php if (count($posts) > 0) {
             for ($i = 0; $i <= count($posts) - 1; $i++) { ?>
@@ -50,6 +51,9 @@ $posts = $postRepository->getVisiblePosts();
                     </td>
                     <td>
                         <?php echo $posts[$i]['tags'] ?>
+                    </td>
+                    <td>
+                        <a href="./show-post.php?id=<?php echo $posts[$i]['id'] ?>">View</a>
                     </td>
                 </tr>
         <?php }
