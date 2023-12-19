@@ -10,7 +10,6 @@ use App\Repository\PostsTagsRepository;
 use App\Service\DatabaseConnector;
 use App\Service\PostService;
 use PDO;
-use PDOException;
 use Throwable;
 
 class PostController
@@ -52,27 +51,25 @@ class PostController
 
     public static function deletePost(): bool
     {
-        $isExceptionThrown = false;
-
+        $isFailed = false;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $db = DatabaseConnector::getDatabaseConnection();
             $postsTagsRepository = new PostsTagsRepository($db);
-            $postId = (int) $_POST['id'];
-            $postTag = $postsTagsRepository->getPostTag($postId);
-            if (is_array($postTag)) {
-                $postsTagsRepository->deletePostTag($postId);
-            }
+            $postsTagsRepository->deletePostTag((int) $_POST['id']);
             $postRepository = new PostRepository($db);
             try {
+                $db->beginTransaction();
                 $postRepository->deletePost((int) $_POST['id']);
-            } catch (PDOException $e) {
-                $isExceptionThrown = true;
+                $db->commit();
+            } catch (Throwable $e) {
+                $db->rollBack();
+                $isFailed = true;
             }
-            if (!$isExceptionThrown) {
+            if (!$isFailed) {
                 header('Location: posts-list.php');
             }
         }
-        return $isExceptionThrown;
+        return $isFailed;
     }
 
     private static function validateCreatePostFields(Post $post): bool

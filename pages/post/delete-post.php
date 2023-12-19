@@ -6,7 +6,7 @@ include PROJECT_ROOT . '/src/bootstrap.php';
 
 use App\Controller\PostController;
 
-$isExceptionThrown = PostController::deletePost();
+$isFailed = PostController::deletePost();
 ?>
 
 <!DOCTYPE html>
@@ -20,8 +20,8 @@ $isExceptionThrown = PostController::deletePost();
 
 <body>
     <h1>Delete Post</h1>
-    <?php if ($isExceptionThrown) { ?>
-        <span>That id doesn't exist anymore</span>
+    <?php if ($isFailed) { ?>
+        <span>Something went wrong. There was an error</span>
     <?php } ?>
     <form action="./delete-post.php" method="post">
         <input type="hidden" name="id" value="<?php echo $_GET['id'] ?? '' ?>">
