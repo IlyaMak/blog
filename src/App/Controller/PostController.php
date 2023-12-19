@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\Post;
 use App\Repository\PostRepository;
 use App\Repository\PostsTagsRepository;
+use App\Service\DatabaseConnector;
 use App\Service\PostService;
 use PDO;
 use Throwable;
@@ -24,7 +25,7 @@ class PostController
                 $isFailed = true;
                 return $isFailed;
             }
-                $post = PostService::getPostInstance();
+            $post = PostService::getPostInstance();
             if (self::validateCreatePostFields($post, $_FILES['image'])) {
                 $postRepository = new PostRepository($db);
                 try {
@@ -43,6 +44,30 @@ class PostController
                 header('Location: posts-list.php');
             } else {
                 $isFailed = true;
+            }
+        }
+        return $isFailed;
+    }
+
+    public static function deletePost(): bool
+    {
+        $isFailed = false;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $db = DatabaseConnector::getDatabaseConnection();
+            $postsTagsRepository = new PostsTagsRepository($db);
+            $postRepository = new PostRepository($db);
+            try {
+                $db->beginTransaction();
+                $postId = (int) $_POST['id'];
+                $postsTagsRepository->deletePostTags($postId);
+                $postRepository->deletePost($postId);
+                $db->commit();
+            } catch (Throwable $e) {
+                $db->rollBack();
+                $isFailed = true;
+            }
+            if (!$isFailed) {
+                header('Location: posts-list.php');
             }
         }
         return $isFailed;
