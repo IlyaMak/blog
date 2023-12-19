@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Repository;
@@ -76,5 +77,14 @@ class PostRepository
         $pdoStatement->bindParam('id', $id);
         $pdoStatement->execute();
         return $pdoStatement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function deletePost(int $id): void
+    {
+        $pdoStatement = $this->db->prepare(
+            'DELETE FROM posts WHERE id = :id'
+        );
+        $pdoStatement->bindParam('id', $id, PDO::PARAM_INT);
+        $pdoStatement->execute();
     }
 }
