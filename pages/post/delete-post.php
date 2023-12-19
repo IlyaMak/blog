@@ -7,7 +7,6 @@ include PROJECT_ROOT . '/src/bootstrap.php';
 use App\Controller\PostController;
 
 $isExceptionThrown = PostController::deletePost();
-var_dump($_POST);
 ?>
 
 <!DOCTYPE html>
