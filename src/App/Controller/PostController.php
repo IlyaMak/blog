@@ -55,11 +55,12 @@ class PostController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $db = DatabaseConnector::getDatabaseConnection();
             $postsTagsRepository = new PostsTagsRepository($db);
-            $postsTagsRepository->deletePostTag((int) $_POST['id']);
             $postRepository = new PostRepository($db);
             try {
                 $db->beginTransaction();
-                $postRepository->deletePost((int) $_POST['id']);
+                $postId = (int) $_POST['id'];
+                $postsTagsRepository->deletePostTags($postId);
+                $postRepository->deletePost($postId);
                 $db->commit();
             } catch (Throwable $e) {
                 $db->rollBack();

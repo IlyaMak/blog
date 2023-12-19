@@ -27,7 +27,7 @@ class PostsTagsRepository
         $pdoStatement->execute();
     }
 
-    public function deletePostTag(int $postId): void
+    public function deletePostTags(int $postId): void
     {
         $pdoStatement = $this->db->prepare(
             'DELETE FROM posts_tags WHERE post_id = :postId'
