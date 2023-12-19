@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Repository;
@@ -63,5 +62,19 @@ class PostRepository
             }
         }
         return array_values($modifiedRecords);
+    }
+
+    public function getPostById(int $id): array|bool
+    {
+        $pdoStatement = $this->db->prepare(
+            'SELECT p.id, p.headline, p.body, p.publish_date, p.image_path, COALESCE(t.name, NULL) as tags 
+            FROM posts p
+            LEFT JOIN posts_tags pt ON p.id = pt.post_id
+            LEFT JOIN tags t ON t.id = pt.tag_id
+            WHERE p.id = :id'
+        );
+        $pdoStatement->bindParam('id', $id);
+        $pdoStatement->execute();
+        return $pdoStatement->fetch(PDO::FETCH_ASSOC);
     }
 }
