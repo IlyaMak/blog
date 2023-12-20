@@ -7,7 +7,6 @@ include '../private-page.php';
 
 use App\Controller\TagController;
 
-checkUserAuthentication();
 $isExceptionThrown = TagController::deleteTag();
 ?>
 

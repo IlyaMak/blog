@@ -9,7 +9,6 @@ use App\Controller\TagController;
 use App\Repository\TagRepository;
 use App\Service\DatabaseConnector;
 
-checkUserAuthentication();
 $isFailed = TagController::createTag();
 $db = DatabaseConnector::getDatabaseConnection();
 $tagRepository = new TagRepository($db);

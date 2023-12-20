@@ -9,7 +9,6 @@ use App\Controller\PostController;
 use App\Repository\TagRepository;
 use App\Service\DatabaseConnector;
 
-checkUserAuthentication();
 $db = DatabaseConnector::getDatabaseConnection();
 $tagRepository = new TagRepository($db);
 $tags = $tagRepository->getTags();
