@@ -31,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isSuccessAuthentication) {
     <?php if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$isSuccessAuthentication) { ?>
         <span>No user found</span>
     <?php } ?>
+    <span>New to this website? <a href="sign-up.php">Join now</a></span>
 </body>
 
 </html>

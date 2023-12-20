@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
 include PROJECT_ROOT . '/src/autoload.php';
+
 $env = parse_ini_file(PROJECT_ROOT .  '/.env');
 
 foreach ($env as $name => $value) {
@@ -9,3 +11,5 @@ foreach ($env as $name => $value) {
         $_ENV[$name] = $value;
     }
 }
+
+session_start();

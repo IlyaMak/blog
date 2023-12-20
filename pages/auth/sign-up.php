@@ -29,6 +29,7 @@ $isFailedRegistration = AuthController::signUp();
     <?php if ($isFailedRegistration) { ?>
         <span>Please, correct fields</span>
     <?php } ?>
+    <span>Already have an account? <a href="sign-in.php">Sign in</a></span>
 </body>
 
 </html>
