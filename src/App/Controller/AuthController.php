@@ -42,7 +42,14 @@ class AuthController
         $db = DatabaseConnector::getDatabaseConnection();
         $userRepository = new UserRepository($db);
         $data = $userRepository->getUser($login);
-        return password_verify($password, $data['password'] ?? '');
+        $isVerified = password_verify($password, $data['password'] ?? '');
+        if (is_array($data) && $isVerified) {
+            session_start();
+            session_regenerate_id();
+            $_SESSION['isLoggedIn'] = true;
+            $_SESSION['id'] = $data['id'];
+        }
+        return $isVerified;
     }
 
     private static function validateSignUpFields(
