@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 include '../set-project-root.php';
 include PROJECT_ROOT . '/src/bootstrap.php';
+include '../private-page.php';
 
 use App\Controller\PostController;
 
+checkUserAuthentication();
 $isFailed = PostController::deletePost();
 ?>
 

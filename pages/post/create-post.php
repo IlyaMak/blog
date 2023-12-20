@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 include '../set-project-root.php';
 include PROJECT_ROOT . '/src/bootstrap.php';
+include '../private-page.php';
 
 use App\Controller\PostController;
 use App\Repository\TagRepository;
 use App\Service\DatabaseConnector;
 
+checkUserAuthentication();
 $db = DatabaseConnector::getDatabaseConnection();
 $tagRepository = new TagRepository($db);
 $tags = $tagRepository->getTags();
