@@ -44,7 +44,6 @@ class AuthController
         $data = $userRepository->getUser($login);
         $isVerified = password_verify($password, $data['password'] ?? '');
         if (is_array($data) && $isVerified) {
-            session_start();
             session_regenerate_id();
             $_SESSION['isLoggedIn'] = true;
             $_SESSION['id'] = $data['id'];
