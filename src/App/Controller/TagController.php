@@ -17,9 +17,9 @@ class TagController
         $isFailed = false;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = (int) $_POST['id'] ?? null;
-            $name = trim($_POST['name']) ?? '';
+            $name = trim($_POST['name'] ?? '');
             $isVisible = (bool) $_POST['isVisible'] ?? false;
-            $parentTagId = empty($_POST['parentTagId']) ? null : $_POST['parentTagId'];
+            $parentTagId = empty($_POST['parentTagId']) ? null : (int) $_POST['parentTagId'];
 
             if (self::validateCreateTagFields($name)) {
                 $tag = new Tag($id, $name, $isVisible, $parentTagId);
@@ -46,7 +46,7 @@ class TagController
             $db = DatabaseConnector::getDatabaseConnection();
             $tagRepository = new TagRepository($db);
             try {
-                $tagRepository->deleteTag($_POST['tagId']);
+                $tagRepository->deleteTag((int) $_POST['tagId']);
             } catch (PDOException $e) {
                 $isExceptionThrown = true;
             }
@@ -57,7 +57,8 @@ class TagController
         return $isExceptionThrown;
     }
 
-    private static function validateCreateTagFields(string $name): bool {
+    private static function validateCreateTagFields(string $name): bool
+    {
         return strlen($name) > 1;
     }
 }
