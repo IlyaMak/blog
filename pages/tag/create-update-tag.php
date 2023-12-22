@@ -35,9 +35,9 @@ $pageName = $tagId == null ? 'Create A Tag' : 'Update A tag';
     <h1><?= $pageName ?></h1>
     <form action='./create-update-tag.php<?= isset($tagId) ? "?id=$tagId" : '' ?>' method="post">
         <input type="hidden" name="id" value="<?= $tagId ?>">
-        <input type="text" name="name" placeholder="Name" value="<?= isset($tagId) ? $tag['name'] : '' ?>">
+        <input type="text" name="name" placeholder="Name" value="<?= $tag['name'] ?? '' ?>">
         Is Visible?
-        <label><input type="radio" name="isVisible" value="1" checked>
+        <label><input type="radio" name="isVisible" value="1" <?= ((isset($tagId) && $tag['is_visible'] == true || $tagId === null)) ? 'checked' : '' ?>>
             Yes
         </label>
         <label><input type="radio" name="isVisible" value="0" <?= isset($tagId) && $tag['is_visible'] == false ? 'checked' : '' ?>>
@@ -50,7 +50,7 @@ $pageName = $tagId == null ? 'Create A Tag' : 'Update A tag';
                     if ($tagId === $tags[$i]['id']) {
                         continue;
                     } ?>
-                    <option value="<?php echo $tags[$i]['id'] ?>" <?= isset($tagId) && $tag['parent_tag_id'] === $tags[$i]['id'] ? "selected" : "" ?>>
+                    <option value="<?php echo $tags[$i]['id'] ?>" <?= isset($tag['parent_tag_id']) && $tag['parent_tag_id'] === $tags[$i]['id'] ? "selected" : "" ?>>
                         <?php echo $tags[$i]['name'] ?>
                     </option>
                 <?php } ?>
