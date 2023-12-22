@@ -87,18 +87,4 @@ class TagRepository
         $pdoStatement->execute();
         return $pdoStatement->fetch(PDO::FETCH_ASSOC);
     }
-
-    public function updateTag(int $id, array $tag): void
-    {
-        $pdoStatement = $this->db->prepare(
-            "UPDATE tags
-            SET name = :name, is_visible = :isVisible, parent_tag_id = :parent_tag_id
-            WHERE id = :id"
-        );
-        $pdoStatement->bindParam('id', $id);
-        $pdoStatement->bindParam('name', $tag['name']);
-        $pdoStatement->bindParam('isVisible', $tag['isVisible']);
-        $pdoStatement->bindParam('parentTagId', $tag['parentTagId']);
-        $pdoStatement->execute();
-    }
 }
