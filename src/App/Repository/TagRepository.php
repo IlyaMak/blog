@@ -75,7 +75,7 @@ class TagRepository
         $pdoStatement->execute();
     }
 
-    public function getTag(int $id): array|bool
+    public function getTag(int $id): array|null
     {
         $pdoStatement = $this->db->prepare(
             "SELECT t1.id, t1.name, t1.is_visible, COALESCE(t2.id, NULL) AS parent_tag_id, COALESCE(t2.name, NULL) AS parent_tag_name
@@ -85,6 +85,6 @@ class TagRepository
         );
         $pdoStatement->bindParam('id', $id);
         $pdoStatement->execute();
-        return $pdoStatement->fetch(PDO::FETCH_ASSOC);
+        return (array) $pdoStatement->fetch(PDO::FETCH_ASSOC) ?? null;
     }
 }
