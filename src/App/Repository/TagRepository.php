@@ -48,11 +48,12 @@ class TagRepository
         $pdoStatement->execute();
     }
 
-    public function getTags(): array|bool
+    public function getTags(): array
     {
         $pdoStatement = $this->db->prepare("SELECT * FROM tags");
         $pdoStatement->execute();
-        return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
+        $fetchedResult = $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
+        return is_array($fetchedResult) ? $fetchedResult : [];
     }
 
     public function getVisibleTagsWithParentTagName(): array|bool
@@ -85,6 +86,7 @@ class TagRepository
         );
         $pdoStatement->bindParam('id', $id);
         $pdoStatement->execute();
-        return (array) $pdoStatement->fetch(PDO::FETCH_ASSOC) ?? null;
+        $fetchedResult = $pdoStatement->fetch(PDO::FETCH_ASSOC);
+        return is_array($fetchedResult) ? $fetchedResult : null;
     }
 }

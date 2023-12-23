@@ -12,7 +12,7 @@ use App\Service\DatabaseConnector;
 
 $db = DatabaseConnector::getDatabaseConnection();
 $tagRepository = new TagRepository($db);
-$tags = $tagRepository->getTags() === false ? [] : (array) $tagRepository->getTags();
+$tags = $tagRepository->getTags();
 $tagId = isset($_GET['id']) ? (int) $_GET['id'] : null;
 $tag = null;
 if ($tagId !== null) {
@@ -20,6 +20,7 @@ if ($tagId !== null) {
 }
 $isFailed = TagController::createOrUpdateTag($db);
 $pageName = $tagId == null ? 'Create A Tag' : 'Update A tag';
+$isVisisble = ((isset($tagId) && $tag['is_visible'] === 1 || $tagId === null));
 ?>
 
 <!DOCTYPE html>
@@ -37,23 +38,21 @@ $pageName = $tagId == null ? 'Create A Tag' : 'Update A tag';
         <input type="hidden" name="id" value="<?= $tagId ?>">
         <input type="text" name="name" placeholder="Name" value="<?= $tag['name'] ?? '' ?>">
         Is Visible?
-        <label><input type="radio" name="isVisible" value="1" <?= ((isset($tagId) && $tag['is_visible'] == true || $tagId === null)) ? 'checked' : '' ?>>
+        <label><input type="radio" name="isVisible" value="1" <?= $isVisisble ? 'checked' : '' ?>>
             Yes
         </label>
-        <label><input type="radio" name="isVisible" value="0" <?= isset($tagId) && $tag['is_visible'] == false ? 'checked' : '' ?>>
+        <label><input type="radio" name="isVisible" value="0" <?= !$isVisisble ? 'checked' : '' ?>>
             No
         </label>
         <select name="parentTagId">
             <option value="">Select a parent tag (optional)</option>
-            <?php if (is_array($tags)) { ?>
-                <?php for ($i = 0; $i <= count($tags) - 1; $i++) {
-                    if ($tagId === $tags[$i]['id']) {
-                        continue;
-                    } ?>
-                    <option value="<?php echo $tags[$i]['id'] ?>" <?= isset($tag['parent_tag_id']) && $tag['parent_tag_id'] === $tags[$i]['id'] ? "selected" : "" ?>>
-                        <?php echo $tags[$i]['name'] ?>
-                    </option>
-                <?php } ?>
+            <?php for ($i = 0; $i <= count($tags) - 1; $i++) {
+                if ($tagId === $tags[$i]['id']) {
+                    continue;
+                } ?>
+                <option value="<?php echo $tags[$i]['id'] ?>" <?= isset($tag['parent_tag_id']) && $tag['parent_tag_id'] === $tags[$i]['id'] ? "selected" : "" ?>>
+                    <?php echo $tags[$i]['name'] ?>
+                </option>
             <?php } ?>
         </select>
         <button type="submit">Save</button>
