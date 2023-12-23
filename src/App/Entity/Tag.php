@@ -7,7 +7,7 @@ namespace App\Entity;
 class Tag
 {
     public function __construct(
-        private ?int $id,
+        private int $id,
         private string $name,
         private bool $isVisible,
         private ?int $parentTagId
