@@ -16,7 +16,7 @@ class TagController
     {
         $isFailed = false;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = (int) $_POST['id'] ?? null;
+            $id = (int) $_POST['id'] ?? 0;
             $name = trim($_POST['name'] ?? '');
             $isVisible = (bool) $_POST['isVisible'] ?? false;
             $parentTagId = empty($_POST['parentTagId']) ? null : (int) $_POST['parentTagId'];
