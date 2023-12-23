@@ -1,29 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Tag;
 use PDOException;
 use App\Repository\TagRepository;
 use App\Service\DatabaseConnector;
+use PDO;
 
 class TagController
 {
-    public static function createTag(): bool
+    public static function createOrUpdateTag(PDO $db): ?bool
     {
-        $name = $_POST['name'] ?? '';
-        $isVisible = $_POST['isVisible'] ?? false;
-        $parentTagId = empty($_POST['parentTagId']) ? null : $_POST['parentTagId'];
-
         $isFailed = false;
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (self::validateCreateTagFields($name, $isVisible)) {
-                $tag = new Tag($name, $isVisible, $parentTagId);
-                $db = DatabaseConnector::getDatabaseConnection();
+            $id = (int) $_POST['id'] ?? 0;
+            $name = trim($_POST['name'] ?? '');
+            $isVisible = (bool) $_POST['isVisible'] ?? false;
+            $parentTagId = empty($_POST['parentTagId']) ? null : (int) $_POST['parentTagId'];
+
+            if (self::validateCreateTagFields($name)) {
+                $tag = new Tag($id, $name, $isVisible, $parentTagId);
                 $tagRepository = new TagRepository($db);
                 try {
-                    $tagRepository->insertTag($tag);
+                    $tagRepository->insertOrUpdateTag($tag);
                 } catch (PDOException $e) {
                     $isFailed = true;
                     return $isFailed;
@@ -44,7 +46,7 @@ class TagController
             $db = DatabaseConnector::getDatabaseConnection();
             $tagRepository = new TagRepository($db);
             try {
-                $tagRepository->deleteTag($_POST['tagId']);
+                $tagRepository->deleteTag((int) $_POST['tagId']);
             } catch (PDOException $e) {
                 $isExceptionThrown = true;
             }
@@ -55,10 +57,8 @@ class TagController
         return $isExceptionThrown;
     }
 
-    private static function validateCreateTagFields(
-        string $name,
-        ?bool $isVisible
-    ): bool {
-        return strlen($name) > 1 && isset($isVisible);
+    private static function validateCreateTagFields(string $name): bool
+    {
+        return strlen($name) > 1;
     }
 }

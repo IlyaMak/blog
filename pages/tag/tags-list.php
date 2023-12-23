@@ -23,7 +23,7 @@ $tags = $tagRepository->getVisibleTagsWithParentTagName();
 
 <body>
     <h1>Tags List</h1>
-    <a href="../tag/create-tag.php">Create tag</a>
+    <a href="../tag/create-update-tag.php">Create tag</a>
     <table>
         <tr>
             <th>Name</th>
@@ -39,6 +39,12 @@ $tags = $tagRepository->getVisibleTagsWithParentTagName();
                     <form action="./delete-tag.php" method="get">
                         <input type="hidden" name="tagId" value="<?php echo $tags[$i]['id'] ?>">
                         <button type="submit">Delete</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="./create-update-tag.php" method="get">
+                        <input type="hidden" name="id" value="<?php echo $tags[$i]['id'] ?>">
+                        <button type="submit">Update</button>
                     </form>
                 </td>
             </tr>

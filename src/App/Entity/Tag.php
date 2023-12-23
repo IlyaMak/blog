@@ -1,19 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 class Tag
 {
-    private int $id;
-
     public function __construct(
+        private int $id,
         private string $name,
         private bool $isVisible,
         private ?int $parentTagId
     ) {
     }
 
-    public function getId(): string
+    public function getId(): int
     {
         return $this->id;
     }
