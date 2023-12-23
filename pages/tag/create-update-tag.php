@@ -20,7 +20,7 @@ if ($tagId !== null) {
 }
 $isFailed = TagController::createOrUpdateTag($db);
 $pageName = $tagId == null ? 'Create A Tag' : 'Update A tag';
-$isVisisble = ((isset($tagId) && $tag['is_visible'] === 1 || $tagId === null));
+$isVisible = (isset($tagId) && $tag['is_visible'] === 1) || $tagId === null;
 ?>
 
 <!DOCTYPE html>
@@ -38,15 +38,15 @@ $isVisisble = ((isset($tagId) && $tag['is_visible'] === 1 || $tagId === null));
         <input type="hidden" name="id" value="<?= $tagId ?>">
         <input type="text" name="name" placeholder="Name" value="<?= $tag['name'] ?? '' ?>">
         Is Visible?
-        <label><input type="radio" name="isVisible" value="1" <?= $isVisisble ? 'checked' : '' ?>>
+        <label><input type="radio" name="isVisible" value="1" <?= $isVisible ? 'checked' : '' ?>>
             Yes
         </label>
-        <label><input type="radio" name="isVisible" value="0" <?= !$isVisisble ? 'checked' : '' ?>>
+        <label><input type="radio" name="isVisible" value="0" <?= !$isVisible ? 'checked' : '' ?>>
             No
         </label>
         <select name="parentTagId">
             <option value="">Select a parent tag (optional)</option>
-            <?php for ($i = 0; $i <= count($tags) - 1; $i++) {
+            <?php for ($i = 0; $i < count($tags); $i++) {
                 if ($tagId === $tags[$i]['id']) {
                     continue;
                 } ?>
