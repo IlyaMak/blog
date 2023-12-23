@@ -25,7 +25,7 @@ class TagRepository
         $columnsArray = ['name', ' is_visible', ' parent_tag_id'];
         $valuesArray = [':name', ' :isVisible', ' :parentTagId'];
         $columnsAndValuesArray = ['name = :name', ' is_visible = :isVisible', ' parent_tag_id = :parentTagId'];
-        if ($id !== null) {
+        if ($id !== 0) {
             array_unshift($columnsArray, 'id');
             array_unshift($valuesArray, ':id');
             array_unshift($columnsAndValuesArray, 'id = :id');
@@ -39,7 +39,7 @@ class TagRepository
             ON DUPLICATE KEY UPDATE
             $columnsAndValuesString"
         );
-        if ($id !== null) {
+        if ($id !== 0) {
             $pdoStatement->bindParam('id', $id, PDO::PARAM_INT);
         }
         $pdoStatement->bindParam('name', $name);
