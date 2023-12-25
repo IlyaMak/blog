@@ -41,7 +41,7 @@ class PostService
             $headline,
             $body,
             $tags,
-            $publishDate->format('Y-m-d H:i'),
+            $publishDate->format('Y-m-d H:i:s'),
             $imagePath,
             $isVisible
         );
