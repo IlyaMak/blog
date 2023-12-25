@@ -24,18 +24,20 @@ class PostRepository
         $publishDate = $post->getPublishDate();
         $imagePath = $post->getImagePath();
         $isVisible = $post->getIsVisible();
+        $userId = $post->getUserId();
         $columnsArray = [
-            'headline', 'body', 'publish_date', 'image_path', 'is_visible'
+            'headline', 'body', 'publish_date', 'image_path', 'is_visible, user_id'
         ];
         $valuesArray = [
-            ':headline', ':body', ':publishDate', ':imagePath', ':isVisible'
+            ':headline', ':body', ':publishDate', ':imagePath', ':isVisible, :userId'
         ];
         $columnsAndValuesArray = [
             'headline = :headline',
             'body = :body',
             'publish_date = :publishDate',
             'image_path = :imagePath',
-            'is_visible = :isVisible'
+            'is_visible = :isVisible',
+            'user_id = :userId',
         ];
         if ($id !== 0) {
             array_unshift($columnsArray, 'id');
@@ -59,6 +61,7 @@ class PostRepository
         $pdoStatement->bindParam('publishDate', $publishDate);
         $pdoStatement->bindParam('imagePath', $imagePath);
         $pdoStatement->bindParam('isVisible', $isVisible, PDO::PARAM_BOOL);
+        $pdoStatement->bindParam('userId', $userId, PDO::PARAM_INT);
         $pdoStatement->execute();
         return (int) $this->db->lastInsertId();
     }
@@ -68,7 +71,7 @@ class PostRepository
         $visible = true;
         $currentDate = date('Y-m-d H:i:s');
         $pdoStatement = $this->db->prepare(
-            'SELECT p.id, p.headline, p.body, p.publish_date, p.image_path, COALESCE(t.name, "-") as tags
+            'SELECT p.id, p.headline, p.body, p.publish_date, p.image_path, p.user_id, COALESCE(t.name, "-") as tags
             FROM posts p 
             LEFT JOIN posts_tags pt ON p.id = pt.post_id
             LEFT JOIN tags t ON t.id = pt.tag_id
@@ -95,7 +98,7 @@ class PostRepository
     public function getPostById(int $id): array
     {
         $pdoStatement = $this->db->prepare(
-            'SELECT p.id, p.headline, p.body, p.publish_date, p.image_path, p.is_visible, t.name as tag_names
+            'SELECT p.id, p.headline, p.body, p.publish_date, p.image_path, p.is_visible, p.user_id, t.name as tag_names
             FROM posts p
             LEFT JOIN posts_tags pt ON p.id = pt.post_id
             LEFT JOIN tags t ON t.id = pt.tag_id
