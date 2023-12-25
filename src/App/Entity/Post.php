@@ -13,7 +13,8 @@ class Post
         private array $tags,
         private string $publishDate,
         private string $imagePath,
-        private bool $isVisible
+        private bool $isVisible,
+        private int $userId
     ) {
     }
 
@@ -85,5 +86,15 @@ class Post
     public function setIsVisible(bool $isVisible): void
     {
         $this->isVisible = $isVisible;
+    }
+
+    public function getUserId(): int
+    {
+        return $this->userId;
+    }
+
+    public function setUserId(int $userId): void
+    {
+        $this->userId = $userId;
     }
 }
