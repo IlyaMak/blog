@@ -55,12 +55,14 @@ $posts = $postRepository->getVisiblePosts();
                     <td>
                         <a href="./show-post.php?id=<?php echo $posts[$i]['id'] ?>">View</a>
                     </td>
-                    <td>
-                        <a href="./create-update-post.php?id=<?php echo $posts[$i]['id'] ?>">Update</a>
-                    </td>
-                    <td>
-                        <a href="./delete-post.php?id=<?php echo $posts[$i]['id'] ?>">Delete</a>
-                    </td>
+                    <?php if ($_SESSION['id'] === $posts[$i]['user_id']) { ?>
+                        <td>
+                            <a href="./create-update-post.php?id=<?php echo $posts[$i]['id'] ?>">Update</a>
+                        </td>
+                        <td>
+                            <a href="./delete-post.php?id=<?php echo $posts[$i]['id'] ?>">Delete</a>
+                        </td>
+                    <?php } ?>
                 </tr>
         <?php }
         } ?>
