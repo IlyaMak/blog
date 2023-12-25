@@ -23,12 +23,12 @@ $post = $postRepository->getPostById((int) $_GET['id']);
 
 <body>
     <h1>Post</h1>
-    <?php if (is_array($post)) { ?>
+    <?php if (!empty($post)) { ?>
         <h2><?php echo $post['headline'] ?></h2>
         <img src="<?php echo $post['image_path'] ?>" width="400px" alt="post image">
         <div><?php echo $post['body'] ?></div>
-        <?php if ($post['tags'] !== null) { ?>
-            <div>Tags: <?php echo $post['tags'] ?></div>
+        <?php if ($post['tag_names'] !== null) { ?>
+            <div>Tags: <?php echo $post['tag_names'] ?></div>
         <?php } ?>
         <div>Publish date: <?php echo $post['publish_date'] ?></div>
     <?php } ?>

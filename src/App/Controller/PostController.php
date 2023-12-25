@@ -14,25 +14,30 @@ use Throwable;
 
 class PostController
 {
-    public static function createPost(PDO $db): bool
+    public static function createPost(PDO $db, ?string $oldImagePath): bool
     {
         $isFailed = false;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (
-                $_FILES['image']['error'] !== UPLOAD_ERR_OK
-                || !in_array($_FILES['image']['type'], ['image/png', 'image/jpg', 'image/jpeg'])
+                ($_FILES['image']['error'] !== UPLOAD_ERR_OK
+                    || !in_array($_FILES['image']['type'], ['image/png', 'image/jpg', 'image/jpeg']))
+                && $oldImagePath === null
             ) {
                 $isFailed = true;
                 return $isFailed;
             }
-            $post = PostService::getPostInstance();
-            if (self::validateCreatePostFields($post, $_FILES['image'])) {
+            $post = PostService::getPostInstance($oldImagePath);
+            if (self::validateCreatePostFields($post)) {
                 $postRepository = new PostRepository($db);
                 try {
                     $db->beginTransaction();
-                    $postId = $postRepository->insertPost($post);
+                    $postId = $postRepository->insertOrUpdatePost($post);
+                    $postTagsRepository = new PostsTagsRepository($db);
+                    if ($_POST['id'] !== '') {
+                        $postId = (int) $_POST['id'];
+                        $postTagsRepository->deletePostTags($postId);
+                    }
                     if (isset($_POST['tags'])) {
-                        $postTagsRepository = new PostsTagsRepository($db);
                         $postTagsRepository->insertPostTag($postId, $_POST['tags']);
                     }
                     $db->commit();

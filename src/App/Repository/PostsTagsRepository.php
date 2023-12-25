@@ -35,4 +35,15 @@ class PostsTagsRepository
         $pdoStatement->bindParam('postId', $postId, PDO::PARAM_INT);
         $pdoStatement->execute();
     }
+
+    public function getPostTags(int $postId): array
+    {
+        $pdoStatement = $this->db->prepare(
+            'SELECT tag_id FROM posts_tags WHERE post_id = :postId'
+        );
+        $pdoStatement->bindParam('postId', $postId, PDO::PARAM_INT);
+        $pdoStatement->execute();
+        $fetchedResult = $pdoStatement->fetchAll(PDO::FETCH_COLUMN);
+        return is_array($fetchedResult) ? $fetchedResult : [];
+    }
 }
