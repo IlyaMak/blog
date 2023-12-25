@@ -43,7 +43,8 @@ class PostService
             $tags,
             $publishDate->format('Y-m-d H:i:s'),
             $imagePath,
-            $isVisible
+            $isVisible,
+            $_SESSION['id']
         );
     }
 }
