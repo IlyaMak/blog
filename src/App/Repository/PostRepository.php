@@ -25,17 +25,17 @@ class PostRepository
         $imagePath = $post->getImagePath();
         $isVisible = $post->getIsVisible();
         $columnsArray = [
-            'headline', ' body', ' publish_date', ' image_path', ' is_visible'
+            'headline', 'body', 'publish_date', 'image_path', 'is_visible'
         ];
         $valuesArray = [
-            ':headline', ' :body', ' :publishDate', ' :imagePath', ' :isVisible'
+            ':headline', ':body', ':publishDate', ':imagePath', ':isVisible'
         ];
         $columnsAndValuesArray = [
             'headline = :headline',
-            ' body = :body',
-            ' publish_date = :publishDate',
-            ' image_path = :imagePath',
-            ' is_visible = :isVisible'
+            'body = :body',
+            'publish_date = :publishDate',
+            'image_path = :imagePath',
+            'is_visible = :isVisible'
         ];
         if ($id !== 0) {
             array_unshift($columnsArray, 'id');
@@ -92,10 +92,10 @@ class PostRepository
         return array_values($modifiedRecords);
     }
 
-    public function getPostById(int $id): array|null
+    public function getPostById(int $id): array
     {
         $pdoStatement = $this->db->prepare(
-            'SELECT p.id, p.headline, p.body, p.publish_date, p.image_path, p.is_visible, COALESCE(t.name, NULL) as tag_name 
+            'SELECT p.id, p.headline, p.body, p.publish_date, p.image_path, p.is_visible, t.name
             FROM posts p
             LEFT JOIN posts_tags pt ON p.id = pt.post_id
             LEFT JOIN tags t ON t.id = pt.tag_id
@@ -103,8 +103,21 @@ class PostRepository
         );
         $pdoStatement->bindParam('id', $id);
         $pdoStatement->execute();
-        $fetchedResult = $pdoStatement->fetch(PDO::FETCH_ASSOC);
-        return is_array($fetchedResult) ? $fetchedResult : null;
+        $records = $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
+        $modifiedRecords = [];
+        if (is_array($records)) {
+            $id = null;
+            foreach ($records as $record) {
+                $id = $record['id'];
+                if (!isset($modifiedRecords[$id])) {
+                    $modifiedRecords[$id] = $record;
+                } else {
+                    $modifiedRecords[$id]['name'] .= ",{$record['name']}";
+                }
+            }
+            return $modifiedRecords[$id];
+        }
+        return $modifiedRecords;
     }
 
     public function deletePost(int $id): void

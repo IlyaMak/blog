@@ -16,7 +16,7 @@ $db = DatabaseConnector::getDatabaseConnection();
 $tagRepository = new TagRepository($db);
 $tags = $tagRepository->getTags();
 $postId = isset($_GET['id']) ? (int) $_GET['id'] : null;
-$post = null;
+$post = [];
 $postTagIds = [];
 $postRepository = new PostRepository($db);
 $postTagsRepository = new PostsTagsRepository($db);
@@ -51,7 +51,7 @@ $pageName = $postId === null ? 'Create A Post' : 'Update A Post';
             <label for="tags">Select tags</label>
             <select name="tags[]" id="tags" multiple>
                 <?php for ($i = 0; $i < count($tags); $i++) { ?>
-                    <option value="<?php echo $tags[$i]['id'] ?>" <?= count($postTagIds) > 0 && in_array($tags[$i]['id'], $postTagIds) ? 'selected' : '' ?>>
+                    <option value="<?php echo $tags[$i]['id'] ?>" <?= in_array($tags[$i]['id'], $postTagIds) ? 'selected' : '' ?>>
                         <?php echo $tags[$i]['name'] ?>
                     </option>
                 <?php } ?>
@@ -66,7 +66,7 @@ $pageName = $postId === null ? 'Create A Post' : 'Update A Post';
             <input type="file" name="image" id="image" size="2000000" <?= isset($postId) ? '' : 'required' ?> />
         </div>
         <div>
-            <input type="checkbox" id="isVisible" name="isVisible" value="1" <?= (isset($post) && $post['is_visible'] === 1) || $postId === null ? 'checked' : '' ?> />
+            <input type="checkbox" id="isVisible" name="isVisible" <?= (!empty($post) && $post['is_visible'] === 1) || $postId === null ? 'checked' : '' ?> />
             <label for="isVisible">Is visible?</label>
         </div>
         <button type="submit">Save</button>
