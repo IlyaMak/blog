@@ -24,7 +24,7 @@ $posts = $postRepository->getVisiblePosts();
 
 <body>
     <h1>Posts List</h1>
-    <a href="./create-post.php">Create A Post</a>
+    <a href="./create-update-post.php">Create A Post</a>
     <a href="../tag/tags-list.php">Tags List</a>
     <table>
         <tr>
@@ -54,6 +54,9 @@ $posts = $postRepository->getVisiblePosts();
                     </td>
                     <td>
                         <a href="./show-post.php?id=<?php echo $posts[$i]['id'] ?>">View</a>
+                    </td>
+                    <td>
+                        <a href="./create-update-post.php?id=<?php echo $posts[$i]['id'] ?>">Update</a>
                     </td>
                     <td>
                         <a href="./delete-post.php?id=<?php echo $posts[$i]['id'] ?>">Delete</a>
