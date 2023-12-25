@@ -6,9 +6,8 @@ namespace App\Entity;
 
 class Post
 {
-    private int $id;
-
     public function __construct(
+        private int $id,
         private string $headline,
         private string $body,
         private array $tags,
