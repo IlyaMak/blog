@@ -22,6 +22,10 @@ $postRepository = new PostRepository($db);
 $postTagsRepository = new PostsTagsRepository($db);
 if ($postId !== null) {
     $post = $postRepository->getPostById($postId);
+    if ($_SESSION['id'] !== $post['user_id']) {
+        header('Location: /pages/post/posts-list.php');
+        exit;
+    }
     $postTagIds = $postTagsRepository->getPostTags($postId);
 }
 $isFailed = PostController::createPost($db, $post['image_path'] ?? null);
