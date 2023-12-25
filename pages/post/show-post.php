@@ -27,8 +27,8 @@ $post = $postRepository->getPostById((int) $_GET['id']);
         <h2><?php echo $post['headline'] ?></h2>
         <img src="<?php echo $post['image_path'] ?>" width="400px" alt="post image">
         <div><?php echo $post['body'] ?></div>
-        <?php if ($post['tags'] !== null) { ?>
-            <div>Tags: <?php echo $post['tags'] ?></div>
+        <?php if ($post['tag_name'] !== null) { ?>
+            <div>Tags: <?php echo $post['tag_name'] ?></div>
         <?php } ?>
         <div>Publish date: <?php echo $post['publish_date'] ?></div>
     <?php } ?>

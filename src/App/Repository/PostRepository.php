@@ -16,17 +16,44 @@ class PostRepository
         $this->db = $db;
     }
 
-    public function insertPost(Post $post): int
+    public function insertOrUpdatePost(Post $post): int
     {
+        $id = $post->getId();
         $headline = $post->getHeadline();
         $body = $post->getBody();
         $publishDate = $post->getPublishDate();
         $imagePath = $post->getImagePath();
         $isVisible = $post->getIsVisible();
+        $columnsArray = [
+            'headline', ' body', ' publish_date', ' image_path', ' is_visible'
+        ];
+        $valuesArray = [
+            ':headline', ' :body', ' :publishDate', ' :imagePath', ' :isVisible'
+        ];
+        $columnsAndValuesArray = [
+            'headline = :headline',
+            ' body = :body',
+            ' publish_date = :publishDate',
+            ' image_path = :imagePath',
+            ' is_visible = :isVisible'
+        ];
+        if ($id !== 0) {
+            array_unshift($columnsArray, 'id');
+            array_unshift($valuesArray, ':id');
+            array_unshift($columnsAndValuesArray, 'id = :id');
+        }
+        $columnsString = implode(',', $columnsArray);
+        $valuesString = implode(',', $valuesArray);
+        $columnsAndValuesString = implode(',', $columnsAndValuesArray);
         $pdoStatement = $this->db->prepare(
-            "INSERT INTO posts (headline, body, publish_date, image_path, is_visible) 
-            VALUES (:headline, :body, :publishDate, :imagePath, :isVisible);"
+            "INSERT INTO posts ($columnsString) 
+            VALUES ($valuesString)
+            ON DUPLICATE KEY UPDATE
+            $columnsAndValuesString"
         );
+        if ($id !== 0) {
+            $pdoStatement->bindParam('id', $id, PDO::PARAM_INT);
+        }
         $pdoStatement->bindParam('headline', $headline);
         $pdoStatement->bindParam('body', $body);
         $pdoStatement->bindParam('publishDate', $publishDate);
@@ -65,10 +92,10 @@ class PostRepository
         return array_values($modifiedRecords);
     }
 
-    public function getPostById(int $id): array|bool
+    public function getPostById(int $id): array|null
     {
         $pdoStatement = $this->db->prepare(
-            'SELECT p.id, p.headline, p.body, p.publish_date, p.image_path, COALESCE(t.name, NULL) as tags 
+            'SELECT p.id, p.headline, p.body, p.publish_date, p.image_path, p.is_visible, COALESCE(t.name, NULL) as tag_name 
             FROM posts p
             LEFT JOIN posts_tags pt ON p.id = pt.post_id
             LEFT JOIN tags t ON t.id = pt.tag_id
@@ -76,7 +103,8 @@ class PostRepository
         );
         $pdoStatement->bindParam('id', $id);
         $pdoStatement->execute();
-        return $pdoStatement->fetch(PDO::FETCH_ASSOC);
+        $fetchedResult = $pdoStatement->fetch(PDO::FETCH_ASSOC);
+        return is_array($fetchedResult) ? $fetchedResult : null;
     }
 
     public function deletePost(int $id): void
