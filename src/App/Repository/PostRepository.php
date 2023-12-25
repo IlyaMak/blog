@@ -95,7 +95,7 @@ class PostRepository
     public function getPostById(int $id): array
     {
         $pdoStatement = $this->db->prepare(
-            'SELECT p.id, p.headline, p.body, p.publish_date, p.image_path, p.is_visible, t.name
+            'SELECT p.id, p.headline, p.body, p.publish_date, p.image_path, p.is_visible, t.name as tag_names
             FROM posts p
             LEFT JOIN posts_tags pt ON p.id = pt.post_id
             LEFT JOIN tags t ON t.id = pt.tag_id
@@ -112,7 +112,7 @@ class PostRepository
                 if (!isset($modifiedRecords[$id])) {
                     $modifiedRecords[$id] = $record;
                 } else {
-                    $modifiedRecords[$id]['name'] .= ",{$record['name']}";
+                    $modifiedRecords[$id]['tag_names'] .= ",{$record['tag_names']}";
                 }
             }
             return $modifiedRecords[$id];
