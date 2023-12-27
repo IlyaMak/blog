@@ -12,12 +12,14 @@ use App\Service\DatabaseConnector;
 
 $db = DatabaseConnector::getDatabaseConnection();
 $postRepository = new PostRepository($db);
-$post = $postRepository->getPostById((int) $_GET['id']);
+$post = $postRepository->getPostById(
+    $_SERVER['REQUEST_METHOD'] === 'GET' ? (int) $_GET['id'] : (int) $_POST['id']
+);
+$isFailed = PostController::deletePost($post);
 if ($_SESSION['id'] !== $post['user_id']) {
     header('Location: /pages/post/posts-list.php');
     exit;
 }
-$isFailed = PostController::deletePost();
 ?>
 
 <!DOCTYPE html>
