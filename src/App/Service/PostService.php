@@ -16,7 +16,7 @@ class PostService
         $body = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $_POST['body']);
         $tags = $_POST['tags'] ?? [];
         $date = DateTime::createFromFormat(
-            "Y-m-d\\TH:i",
+            "Y-m-d\\TH:i:s",
             $_POST['publishDate']
         );
         $publishDate = $date === false ? new DateTime() : $date;
