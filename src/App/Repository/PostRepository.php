@@ -66,49 +66,14 @@ class PostRepository
         return (int) $this->db->lastInsertId();
     }
 
-    public function getVisiblePosts(): array
+    public function getPosts(): array
     {
-        $visible = true;
-        $currentDate = date('Y-m-d H:i:s');
         $pdoStatement = $this->db->prepare(
-            'SELECT p.id, p.headline, p.body, p.publish_date, p.image_path, p.user_id, COALESCE(t.name, "-") as tags
+            'SELECT p.id, p.headline, p.body, p.publish_date, p.image_path, p.is_visible, p.user_id, COALESCE(t.name, "-") as tags
             FROM posts p 
             LEFT JOIN posts_tags pt ON p.id = pt.post_id
-            LEFT JOIN tags t ON t.id = pt.tag_id
-            WHERE p.is_visible = :visible AND p.publish_date <= :currentDate'
+            LEFT JOIN tags t ON t.id = pt.tag_id'
         );
-        $pdoStatement->bindParam('visible', $visible, PDO::PARAM_BOOL);
-        $pdoStatement->bindParam('currentDate', $currentDate);
-        $pdoStatement->execute();
-        $records = $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
-        $modifiedRecords = [];
-        if (is_array($records)) {
-            foreach ($records as $record) {
-                $id = $record['id'];
-                if (!isset($modifiedRecords[$id])) {
-                    $modifiedRecords[$id] = $record;
-                } else {
-                    $modifiedRecords[$id]['tags'] .= ",{$record['tags']}";
-                }
-            }
-        }
-        return array_values($modifiedRecords);
-    }
-
-    public function getUserPosts(int $userId): array
-    {
-        $notVisible = false;
-        $currentDate = date('Y-m-d H:i:s');
-        $pdoStatement = $this->db->prepare(
-            'SELECT p.id, p.headline, p.body, p.publish_date, p.image_path, p.user_id, COALESCE(t.name, "-") as tags
-            FROM posts p 
-            LEFT JOIN posts_tags pt ON p.id = pt.post_id
-            LEFT JOIN tags t ON t.id = pt.tag_id
-            WHERE p.user_id = :userId AND (p.is_visible = :notVisible OR p.publish_date > :currentDate)'
-        );
-        $pdoStatement->bindParam('userId', $userId, PDO::PARAM_INT);
-        $pdoStatement->bindParam('notVisible', $notVisible, PDO::PARAM_BOOL);
-        $pdoStatement->bindParam('currentDate', $currentDate);
         $pdoStatement->execute();
         $records = $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
         $modifiedRecords = [];

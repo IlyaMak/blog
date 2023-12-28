@@ -10,8 +10,7 @@ use App\Service\DatabaseConnector;
 
 $db = DatabaseConnector::getDatabaseConnection();
 $postRepository = new PostRepository($db);
-$posts = $postRepository->getVisiblePosts();
-$userDraftPosts = $postRepository->getUserPosts((int) $_SESSION['id']);
+$posts = $postRepository->getPosts();
 ?>
 
 <!DOCTYPE html>
@@ -63,51 +62,20 @@ $userDraftPosts = $postRepository->getUserPosts((int) $_SESSION['id']);
                         <td>
                             <a href="./delete-post.php?id=<?php echo $posts[$i]['id'] ?>">Delete</a>
                         </td>
+                    <?php }
+                    if (
+                        $_SESSION['id'] === $posts[$i]['user_id']
+                        && (!$posts[$i]['is_visible']
+                            || $posts[$i]['publish_date'] > date('Y-m-d H:i:s'))
+                    ) { ?>
+                        <td>
+                            Draft
+                        </td>
                     <?php } ?>
                 </tr>
         <?php }
         } ?>
     </table>
-    <?php if (count($userDraftPosts) > 0) { ?>
-        <h3>Your Drafts</h3>
-        <table>
-            <tr>
-                <th>Image</th>
-                <th>Headline</th>
-                <th>Body</th>
-                <th>Tags</th>
-            </tr>
-            <?php for ($i = 0; $i < count($userDraftPosts); $i++) { ?>
-                <tr>
-                    <td>
-                        <img src="<?php echo $userDraftPosts[$i]['image_path'] ?>" alt="post image" width="100px" />
-                    </td>
-                    <td>
-                        <?php echo strlen($userDraftPosts[$i]['headline']) > 50
-                            ? substr($userDraftPosts[$i]['headline'], 0, 50) . '...'
-                            : $userDraftPosts[$i]['headline'] ?>
-                    </td>
-                    <td>
-                        <?php echo strlen($userDraftPosts[$i]['body']) > 100
-                            ? substr($userDraftPosts[$i]['body'], 0, 100) . '...'
-                            : $userDraftPosts[$i]['body'] ?>
-                    </td>
-                    <td>
-                        <?php echo $userDraftPosts[$i]['tags'] ?>
-                    </td>
-                    <td>
-                        <a href="./show-post.php?id=<?php echo $userDraftPosts[$i]['id'] ?>">View</a>
-                    </td>
-                    <td>
-                        <a href="./create-update-post.php?id=<?php echo $userDraftPosts[$i]['id'] ?>">Update</a>
-                    </td>
-                    <td>
-                        <a href="./delete-post.php?id=<?php echo $userDraftPosts[$i]['id'] ?>">Delete</a>
-                    </td>
-                </tr>
-            <?php } ?>
-        </table>
-    <?php } ?>
 </body>
 
 </html>
