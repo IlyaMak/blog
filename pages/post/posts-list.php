@@ -34,7 +34,13 @@ $posts = $postRepository->getPosts();
             <th>Tags</th>
         </tr>
         <?php if (count($posts) > 0) {
-            for ($i = 0; $i < count($posts); $i++) { ?>
+            for ($i = 0; $i < count($posts); $i++) {
+                $isPostOwner = $_SESSION['id'] === $posts[$i]['user_id'];
+                $isDraftPost = !$posts[$i]['is_visible']
+                    || $posts[$i]['publish_date'] > date('Y-m-d H:i:s');
+                if (!$isPostOwner && ($isDraftPost)) {
+                    continue;
+                } ?>
                 <tr>
                     <td>
                         <img src="<?php echo $posts[$i]['image_path'] ?>" alt="post image" width="100px" />
@@ -55,7 +61,7 @@ $posts = $postRepository->getPosts();
                     <td>
                         <a href="./show-post.php?id=<?php echo $posts[$i]['id'] ?>">View</a>
                     </td>
-                    <?php if ($_SESSION['id'] === $posts[$i]['user_id']) { ?>
+                    <?php if ($isPostOwner) { ?>
                         <td>
                             <a href="./create-update-post.php?id=<?php echo $posts[$i]['id'] ?>">Update</a>
                         </td>
@@ -63,11 +69,7 @@ $posts = $postRepository->getPosts();
                             <a href="./delete-post.php?id=<?php echo $posts[$i]['id'] ?>">Delete</a>
                         </td>
                     <?php }
-                    if (
-                        $_SESSION['id'] === $posts[$i]['user_id']
-                        && (!$posts[$i]['is_visible']
-                            || $posts[$i]['publish_date'] > date('Y-m-d H:i:s'))
-                    ) { ?>
+                    if ($isPostOwner && ($isDraftPost)) { ?>
                         <td>
                             Draft
                         </td>
