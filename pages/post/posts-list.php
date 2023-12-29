@@ -10,7 +10,8 @@ use App\Service\DatabaseConnector;
 
 $db = DatabaseConnector::getDatabaseConnection();
 $postRepository = new PostRepository($db);
-$posts = $postRepository->getPosts();
+$sessionId = isset($_SESSION['id']) ? (int) $_SESSION['id'] : 0;
+$posts = $postRepository->getPosts($sessionId);
 ?>
 
 <!DOCTYPE html>
@@ -35,12 +36,7 @@ $posts = $postRepository->getPosts();
         </tr>
         <?php if (count($posts) > 0) {
             for ($i = 0; $i < count($posts); $i++) {
-                $isPostOwner = $_SESSION['id'] === $posts[$i]['user_id'];
-                $isDraftPost = !$posts[$i]['is_visible']
-                    || $posts[$i]['publish_date'] > date('Y-m-d H:i:s');
-                if (!$isPostOwner && ($isDraftPost)) {
-                    continue;
-                } ?>
+                $isPostOwner = $sessionId === $posts[$i]['user_id']; ?>
                 <tr>
                     <td>
                         <img src="<?php echo $posts[$i]['image_path'] ?>" alt="post image" width="100px" />
@@ -68,12 +64,13 @@ $posts = $postRepository->getPosts();
                         <td>
                             <a href="./delete-post.php?id=<?php echo $posts[$i]['id'] ?>">Delete</a>
                         </td>
+                        <?php if (!$posts[$i]['is_visible']
+                            || $posts[$i]['publish_date'] > date('Y-m-d H:i:s')) { ?>
+                            <td>
+                                Draft
+                            </td>
                     <?php }
-                    if ($isPostOwner && ($isDraftPost)) { ?>
-                        <td>
-                            Draft
-                        </td>
-                    <?php } ?>
+                    } ?>
                 </tr>
         <?php }
         } ?>
