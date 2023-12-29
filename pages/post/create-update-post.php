@@ -63,7 +63,7 @@ $pageName = $postId === null ? 'Create A Post' : 'Update A Post';
         </div>
         <div>
             <label for="publishDate">Publish Datetime</label>
-            <input type="datetime-local" name="publishDate" id="publishDate" value="<?= $post['publish_date'] ?? '' ?>" />
+            <input type="datetime-local" name="publishDate" id="publishDate" value="<?= isset($post['publish_date']) ? substr($post['publish_date'], 0, -3) : '' ?>" />
         </div>
         <div>
             <label for="image">Preview image</label>
