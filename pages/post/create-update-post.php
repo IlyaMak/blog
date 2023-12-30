@@ -22,6 +22,10 @@ $postRepository = new PostRepository($db);
 $postTagsRepository = new PostsTagsRepository($db);
 if ($postId !== null) {
     $post = $postRepository->getPostById($postId);
+    if ($_SESSION['id'] !== $post['user_id']) {
+        header('Location: /pages/post/posts-list.php');
+        exit;
+    }
     $postTagIds = $postTagsRepository->getPostTags($postId);
 }
 $isFailed = PostController::createPost($db, $post['image_path'] ?? null);
@@ -59,7 +63,7 @@ $pageName = $postId === null ? 'Create A Post' : 'Update A Post';
         </div>
         <div>
             <label for="publishDate">Publish Datetime</label>
-            <input type="datetime-local" name="publishDate" id="publishDate" value="<?= $post['publish_date'] ?? '' ?>" />
+            <input type="datetime-local" name="publishDate" id="publishDate" value="<?= isset($post['publish_date']) ? str_replace(' ', 'T', substr($post['publish_date'], 0, -3)) : '' ?>" />
         </div>
         <div>
             <label for="image">Preview image</label>

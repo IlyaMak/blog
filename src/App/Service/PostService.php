@@ -15,11 +15,11 @@ class PostService
         $headline = $_POST['headline'];
         $body = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $_POST['body']);
         $tags = $_POST['tags'] ?? [];
-        $date = DateTime::createFromFormat(
+        $publishDate = DateTime::createFromFormat(
             "Y-m-d\\TH:i",
             $_POST['publishDate']
         );
-        $publishDate = $date === false ? new DateTime() : $date;
+        $publishDate = $publishDate === false ? new DateTime() : $publishDate;
         $dateTime = new DateTime();
         $dateTimeFormat = $dateTime->format('YmdHisv');
         $imagePath = "/public/$dateTimeFormat." .
@@ -43,7 +43,8 @@ class PostService
             $tags,
             $publishDate->format('Y-m-d H:i:s'),
             $imagePath,
-            $isVisible
+            $isVisible,
+            $_SESSION['id']
         );
     }
 }

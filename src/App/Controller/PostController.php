@@ -54,7 +54,7 @@ class PostController
         return $isFailed;
     }
 
-    public static function deletePost(): bool
+    public static function deletePost(array $post): bool
     {
         $isFailed = false;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -66,6 +66,7 @@ class PostController
                 $postId = (int) $_POST['id'];
                 $postsTagsRepository->deletePostTags($postId);
                 $postRepository->deletePost($postId);
+                unlink(PROJECT_ROOT . $post['image_path']);
                 $db->commit();
             } catch (Throwable $e) {
                 $db->rollBack();
@@ -73,6 +74,7 @@ class PostController
             }
             if (!$isFailed) {
                 header('Location: posts-list.php');
+                exit;
             }
         }
         return $isFailed;

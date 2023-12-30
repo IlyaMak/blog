@@ -10,7 +10,8 @@ use App\Service\DatabaseConnector;
 
 $db = DatabaseConnector::getDatabaseConnection();
 $postRepository = new PostRepository($db);
-$posts = $postRepository->getVisiblePosts();
+$sessionId = isset($_SESSION['id']) ? (int) $_SESSION['id'] : 0;
+$posts = $postRepository->getPosts($sessionId);
 ?>
 
 <!DOCTYPE html>
@@ -34,7 +35,8 @@ $posts = $postRepository->getVisiblePosts();
             <th>Tags</th>
         </tr>
         <?php if (count($posts) > 0) {
-            for ($i = 0; $i <= count($posts) - 1; $i++) { ?>
+            for ($i = 0; $i < count($posts); $i++) {
+                $isPostOwner = $sessionId === $posts[$i]['user_id']; ?>
                 <tr>
                     <td>
                         <img src="<?php echo $posts[$i]['image_path'] ?>" alt="post image" width="100px" />
@@ -55,12 +57,20 @@ $posts = $postRepository->getVisiblePosts();
                     <td>
                         <a href="./show-post.php?id=<?php echo $posts[$i]['id'] ?>">View</a>
                     </td>
-                    <td>
-                        <a href="./create-update-post.php?id=<?php echo $posts[$i]['id'] ?>">Update</a>
-                    </td>
-                    <td>
-                        <a href="./delete-post.php?id=<?php echo $posts[$i]['id'] ?>">Delete</a>
-                    </td>
+                    <?php if ($isPostOwner) { ?>
+                        <td>
+                            <a href="./create-update-post.php?id=<?php echo $posts[$i]['id'] ?>">Update</a>
+                        </td>
+                        <td>
+                            <a href="./delete-post.php?id=<?php echo $posts[$i]['id'] ?>">Delete</a>
+                        </td>
+                        <?php if (!$posts[$i]['is_visible']
+                            || $posts[$i]['publish_date'] > date('Y-m-d H:i:s')) { ?>
+                            <td>
+                                Draft
+                            </td>
+                    <?php }
+                    } ?>
                 </tr>
         <?php }
         } ?>

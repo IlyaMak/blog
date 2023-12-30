@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 include '../set-project-root.php';
@@ -6,8 +7,19 @@ include PROJECT_ROOT . '/src/bootstrap.php';
 include '../private-page.php';
 
 use App\Controller\PostController;
+use App\Repository\PostRepository;
+use App\Service\DatabaseConnector;
 
-$isFailed = PostController::deletePost();
+$db = DatabaseConnector::getDatabaseConnection();
+$postRepository = new PostRepository($db);
+$post = $postRepository->getPostById(
+    $_SERVER['REQUEST_METHOD'] === 'GET' ? (int) $_GET['id'] : (int) $_POST['id']
+);
+if ($_SESSION['id'] !== $post['user_id']) {
+    header('Location: /pages/post/posts-list.php');
+    exit;
+}
+$isFailed = PostController::deletePost($post);
 ?>
 
 <!DOCTYPE html>
