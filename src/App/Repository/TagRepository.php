@@ -59,9 +59,7 @@ class TagRepository
     public function getVisibleTagsWithParentTagName(): int
     {
         return $this->db->query(
-            "SELECT COUNT(*) FROM tags t1
-            LEFT JOIN tags t2 on t1.parent_tag_id = t2.id
-            WHERE t1.is_visible = 1"
+            "SELECT COUNT(*) FROM tags t1 WHERE t1.is_visible = 1"
         )->fetchColumn();
     }
 
