@@ -58,13 +58,11 @@ class TagRepository
 
     public function getVisibleTagsWithParentTagName(): int
     {
-        $pdoStatement = $this->db->prepare(
-            "SELECT t1.id, t1.name, COALESCE(t2.name, '-') as parent_tag_name FROM tags t1
+        return $this->db->query(
+            "SELECT COUNT(*) FROM tags t1
             LEFT JOIN tags t2 on t1.parent_tag_id = t2.id
             WHERE t1.is_visible = 1"
-        );
-        $pdoStatement->execute();
-        return $pdoStatement->rowCount();
+        )->fetchColumn();
     }
 
     public function getLimitedVisibleTagsWithParentTagName(
