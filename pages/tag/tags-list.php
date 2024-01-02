@@ -11,19 +11,17 @@ use App\Service\DatabaseConnector;
 $db = DatabaseConnector::getDatabaseConnection();
 $tagRepository = new TagRepository($db);
 
-$currentPage = 0;
-if (!isset($_GET['page'])) {
-    $currentPage = 1;
-} else {
-    $currentPage = $_GET['page'];
+$currentPage = 1;
+if (isset($_GET['page'])) {
+    $currentPage = (int) $_GET['page'];
 }
 
 const LIMIT = 10;
 $offset = ($currentPage - 1) * LIMIT;
 $tags = $tagRepository->getLimitedVisibleTagsWithParentTagName($offset, LIMIT);
 
-$allTagsAmount = count($tagRepository->getVisibleTagsWithParentTagName());
-$pagesAmount = ceil($allTagsAmount / LIMIT);
+$allTagsCount = $tagRepository->getVisibleTagsWithParentTagName();
+$pagesAmount = ceil($allTagsCount / LIMIT);
 ?>
 
 <!DOCTYPE html>
