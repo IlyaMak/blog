@@ -56,13 +56,25 @@ class TagRepository
         return is_array($fetchedResult) ? $fetchedResult : [];
     }
 
-    public function getVisibleTagsWithParentTagName(): array|bool
+    public function getVisibleTagsWithParentTagName(): int
     {
+        return $this->db->query(
+            "SELECT COUNT(*) FROM tags t1 WHERE t1.is_visible = 1"
+        )->fetchColumn();
+    }
+
+    public function getLimitedVisibleTagsWithParentTagName(
+        int $offset,
+        int $limit
+    ): array|bool {
         $pdoStatement = $this->db->prepare(
             "SELECT t1.id, t1.name, COALESCE(t2.name, '-') as parent_tag_name FROM tags t1
             LEFT JOIN tags t2 on t1.parent_tag_id = t2.id
-            WHERE t1.is_visible = 1"
+            WHERE t1.is_visible = 1
+            LIMIT :limit OFFSET :offset"
         );
+        $pdoStatement->bindParam('limit', $limit, PDO::PARAM_INT);
+        $pdoStatement->bindParam('offset', $offset, PDO::PARAM_INT);
         $pdoStatement->execute();
         return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
     }
