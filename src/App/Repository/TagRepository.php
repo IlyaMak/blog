@@ -56,7 +56,7 @@ class TagRepository
         return is_array($fetchedResult) ? $fetchedResult : [];
     }
 
-    public function getVisibleTagsWithParentTagName(): array|bool
+    public function getVisibleTagsWithParentTagName(): int
     {
         $pdoStatement = $this->db->prepare(
             "SELECT t1.id, t1.name, COALESCE(t2.name, '-') as parent_tag_name FROM tags t1
@@ -64,7 +64,7 @@ class TagRepository
             WHERE t1.is_visible = 1"
         );
         $pdoStatement->execute();
-        return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
+        return $pdoStatement->rowCount();
     }
 
     public function getLimitedVisibleTagsWithParentTagName(
